@@ -1,5 +1,3 @@
 # Library Management System
 
-## Application Diagram
-
-## Application Design
+## 22ug2-0004
