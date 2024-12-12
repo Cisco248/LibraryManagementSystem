@@ -49,10 +49,13 @@ if __name__ == "__main__":
     # ha.edit_author("A002", "Henry William", "School Road,Romania.", "G234567891", "1 - Year")
     # ha.get_authors()
 
-    # hl.add_license("L0001", "5 - Years")
-    # hl.add_license("L0023", "4 - Years")
-    # hl.add_license("L0005", "2 - Years")
-    # hl.get_license()
+    hl.add_license("L0001", "5 - Years")
+    hl.add_license("L0023", "4 - Years")
+    hl.add_license("L0005", "2 - Years")
+    hl.get_license()
+
+    hl.update_license("L0001", "3 - Years")
+    hl.get_license()
 
     # print("\n")
     # member = Member()
