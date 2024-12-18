@@ -1,4 +1,13 @@
+"""
+Module: BookManagement
+
+This module handles book-related operations, such as searching for books
+and displaying book details.
+"""
 class BookManagement:
+    """
+    Manages books by providing functionality to search, display, and update books.
+    """
     def __init__(self, title=None, isbn=None, author_name=None, category='Unknown', status='Available', link='', file_size=''):
         self.title = title
         self.isbn = isbn
@@ -20,7 +29,7 @@ class BookManagement:
     def add_book(self, title, isbn, author, category, status):
         print("\n========== Add Book ==========")
         if isbn in self.books:
-                print(f"Book with ISBN: {book.isbn} already exists")
+                print(f"Book Library is Empty!")
                 return
         else:
             book = {
@@ -33,7 +42,7 @@ class BookManagement:
             self.books.append(book)
             print(f"Book '{title}' Added Successfully!")
             return
-        
+
     def delete_book(self, title, isbn):
         print("\n========== Delete The Book ==========")
         for book in self.books:
@@ -91,7 +100,7 @@ class PrintedBook(BookManagement):
                     print(f"Title: {book['Title']}\nStatus: {next_status}\n>>>>> Already Existed")
                 return
         print(f"Book is Not Found.")
-        
+
 class Ebook(BookManagement):
     def __init__(self, title=None, isbn=None, author_name=None, category='Unknown', status='Available', link='', file_size=''):
         super().__init__(title, isbn, author_name, category, status, link, file_size)
@@ -102,7 +111,7 @@ class Ebook(BookManagement):
     def add_ebook(self, isbn, title, author, category, link, file_size):
         print("\n========== Add E-Book ==========")
         if isbn in self.books:
-            print(f"Book with ISBN {ebook.isbn} Already Exists!")
+            print(f"Ebook Library is Empty!")
         else:
             ebook = {
                 "Title": title,
@@ -129,7 +138,7 @@ class Ebook(BookManagement):
             if isbn in ebook['ISBN']:
                 print(f"Title: {ebook['Title']}\nLink: {ebook['Link']}")
         return f"E-Book is Not Found"
-            
+
     def get_file_size(self, isbn):
         print("\n========== E-Book Size ==========")
         for ebook in self.books:

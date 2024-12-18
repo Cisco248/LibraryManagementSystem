@@ -1,6 +1,14 @@
-from Models.BookManagement import PrintedBook, Ebook
-from Models.AuthorManagement import HandleAuthor, HandleLicense
-from Models.MemberManagement import Member, Employee
+"""
+Module: app
+
+This module acts as the main entry point for the application.
+It integrates functionalities from the `BookManagement`,
+`AuthorManagement`, and `MemberManagement` modules to form
+a cohesive library management system.
+"""
+from book_management import PrintedBook, Ebook
+from author_management import HandleAuthor, HandleLicense
+from member_management import Member, Employee
 
 if __name__ == "__main__":
     pbk = PrintedBook()

@@ -1,4 +1,13 @@
+"""
+Module: MemberManagement
+
+This module handles operations related to library members, such as adding members
+and managing their details.
+"""
 class Member:
+    """
+    Handles member-related operations like adding and updating member records.
+    """
     def __init__(self, member_id=None, member_name=None, contact_no=None, age=0, membership_type=None, membership_status=None):
         self.member_id = member_id
         self.member_name = member_name
@@ -24,7 +33,7 @@ class Member:
                 "Membership Status": membership_status
             }
             self.members.append(member)
-            print(f"Member '{member_id}' Added Successfully!")            
+            print(f"Member '{member_id}' Added Successfully!")
             return
 
     def update_member(self, member_id, new_member_name, new_contact_no, new_age, new_member_type, new_membership_status):
@@ -45,7 +54,7 @@ class Member:
                 return
             else:
                 return f"Member Not Found"
-    
+
     def delete_member(self, member_id):
         print("\n========== Delete Member ==========")
         for member in self.members:
@@ -69,7 +78,7 @@ class Member:
             print(f"{self.member_name}'s membership upgraded to Premium.")
         else:
             print(f"{self.member_name}'s membership is already Premium.")
-    
+
     def downgrade_membership(self):
         if self.membership_type == "Premium":
             self.membership_type = "Standard"
@@ -85,7 +94,7 @@ class Member:
                 return
             else:
                 return f"Please Enter the Valid ISBN"
-        
+
     def return_book(self, book):
         if book in self.borrowed_books:
             self.borrowed_books.remove(book)
@@ -107,23 +116,4 @@ class Employee(Member):
                 print(f"member with ID {member_id} membership status set to {new_membership_status}")
                 return
             print(f"member with ID {member_id} is doesn't exist.")
-
-    # def manage_inventory(self,library, book, action):        
-    #     if action == "add":
-    #         library.add_book(book)
-    #         print(f"Book '{book.title}' has been added to the inventory.")
-    #     elif action == "remove":
-    #         if library.remove_book(book.book_id):
-    #             print(f"Book '{book.title}' has been removed from the inventory.")
-    #         else:
-    #             print(f"Book with ID {book.book_id} could not be found in the inventory.")
-    #     else:
-    #         print("Invalid action. Use 'add' or 'remove'.")
-
-    # def issue_fines(self, member, amount):
-    #     if member.membership_status == "Active":
-    #         member.fine_amount = amount
-    #         print(f"Fine of Rs. {amount} issued to {member.member_name}. Total fine is now Rs.{member.fine_amount}.")
-    #     else:
-    #         print(f"Cannot issue a fine to {member.member_name}. Membership status is '{member.membership_status}'.")
 
