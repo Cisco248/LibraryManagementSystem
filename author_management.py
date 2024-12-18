@@ -123,7 +123,6 @@ class HandleLicense:
             return f"Error: License with number '{license_data['license_no']}' already exists."
         self.licenses.append(license_data)
         print(f"License '{license_data['license_no']}' added successfully!")
-        return
 
     def update_license(self, license_no, updated_data):
         """
@@ -157,5 +156,6 @@ class HandleLicense:
             print("No licenses found.")
             return []
         for license_ in self.licenses:
-            print(f"\nLicense No: {license_['license_no']}\nLicense Period: {license_['license_period']}")
+            print(f"\nLicense No: {license_['license_no']},
+                  \nLicense Period: {license_['license_period']}")
         return self.licenses

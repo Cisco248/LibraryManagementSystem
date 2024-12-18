@@ -43,7 +43,8 @@ class BookManagement:
         """
         print("\n========== Add Book ==========")
         if any(book['ISBN'] == book_data['ISBN'] for book in self.books):
-            return f"Error: Book with ISBN '{book_data['ISBN']}' already exists."
+            print(f"Error: Book with ISBN '{book_data['ISBN']}' already exists.")
+            return
         self.books.append(book_data)
         print(f"Book '{book_data['Title']}' added successfully!")
 
@@ -62,7 +63,9 @@ class BookManagement:
             if book['ISBN'] == isbn:
                 self.books.remove(book)
                 print(f"Book with ISBN '{isbn}' deleted successfully.")
-        return(f"Error: Book with ISBN '{isbn}' not found.")
+                return
+        print(f"Error: Book with ISBN '{isbn}' not found.")
+        return
 
     def update_book_details(self, isbn, updated_data):
         """
@@ -80,7 +83,9 @@ class BookManagement:
             if book['ISBN'] == isbn:
                 book.update({key: value for key, value in updated_data.items() if value})
                 print(f"Book with ISBN '{isbn}' updated successfully.")
-        return(f"Error: Book with ISBN '{isbn}' not found.")
+                return
+        print(f"Error: Book with ISBN '{isbn}' not found.")
+        return
 
     def find_book(self, isbn):
         """
