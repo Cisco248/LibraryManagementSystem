@@ -1,6 +1,6 @@
 from __future__ import annotations
 """
-Module: test_second
+module: test_second
 
 This module contains the test for the second functionality.
 """
