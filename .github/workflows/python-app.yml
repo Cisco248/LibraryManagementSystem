@@ -5,7 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - update
+      - main
   pull_request:
     branches: [ "main" ]
 
@@ -14,6 +16,7 @@ permissions:
 
 jobs:
   build:
+    name: Build My App 🚀
 
     runs-on: ubuntu-latest
 
