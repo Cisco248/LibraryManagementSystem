@@ -1,7 +1,7 @@
 """
 Module: BookManagement
 
-This module handles book-related operations, such as searching for books 
+This module handles book-related operations, such as searching for books
 and displaying book details.
 """
 class BookManagement:
@@ -42,7 +42,7 @@ class BookManagement:
             self.books.append(book)
             print(f"Book '{title}' Added Successfully!")
             return
-        
+
     def delete_book(self, title, isbn):
         print("\n========== Delete The Book ==========")
         for book in self.books:
@@ -100,7 +100,7 @@ class PrintedBook(BookManagement):
                     print(f"Title: {book['Title']}\nStatus: {next_status}\n>>>>> Already Existed")
                 return
         print(f"Book is Not Found.")
-        
+
 class Ebook(BookManagement):
     def __init__(self, title=None, isbn=None, author_name=None, category='Unknown', status='Available', link='', file_size=''):
         super().__init__(title, isbn, author_name, category, status, link, file_size)
@@ -138,7 +138,7 @@ class Ebook(BookManagement):
             if isbn in ebook['ISBN']:
                 print(f"Title: {ebook['Title']}\nLink: {ebook['Link']}")
         return f"E-Book is Not Found"
-            
+
     def get_file_size(self, isbn):
         print("\n========== E-Book Size ==========")
         for ebook in self.books:

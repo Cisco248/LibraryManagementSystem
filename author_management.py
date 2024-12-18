@@ -1,7 +1,7 @@
 """
 Module: AuthorManagement
 
-This module handles the management of authors, including adding, listing, 
+This module handles the management of authors, including adding, listing,
 and retrieving author details.
 """
 class HandleAuthor:
@@ -29,7 +29,7 @@ class HandleAuthor:
                 "Agreement Time": agreement_time
             }
             self.authors.append(author)
-            print(f"Author '{author_id}' Added Successfully!")            
+            print(f"Author '{author_id}' Added Successfully!")
             return
 
     def edit_author(self, author_id, new_author_name, new_address, new_gov_reg_no, new_agreement_time):
@@ -54,7 +54,7 @@ class HandleAuthor:
             print("\n========== Author Details ==========")
             for author in self.authors:
                 print(f"\nAuthor ID: {author['Author ID']}\nAuthor Name: {author['Author Name']}\nAddress: {author['Address']}\nGov Reg No: {author['Gov Reg No']}\nAgreement Period: {author['Agreement Time']}")
-    
+
     def delete_author(self, author_id):
         print("\n========== Delete Author ==========")
         for author in self.authors:
@@ -79,7 +79,7 @@ class HandleLicense(HandleAuthor):
                 "License Period": license_period,
             }
             self.authors.append(author)
-            print(f"License '{license_no}' Added Successfully!")            
+            print(f"License '{license_no}' Added Successfully!")
             return
 
     def update_license(self, license_no, license_period):
@@ -92,7 +92,7 @@ class HandleLicense(HandleAuthor):
                     author["License Period"] = license_period
                 print(f"License No: {license_no}\nLicense Period: {license_period}\n>>>>> Updated Successfully!")
         return f"Author Not Found"
-    
+
     def get_license(self):
         if not self.authors:
             print("List is Empty.")
