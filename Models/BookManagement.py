@@ -20,7 +20,7 @@ class BookManagement:
     def add_book(self, title, isbn, author, category, status):
         print("\n========== Add Book ==========")
         if isbn in self.books:
-                print(f"Book with ISBN: {book.isbn} already exists")
+                print(f"Book Library is Empty!")
                 return
         else:
             book = {
@@ -102,7 +102,7 @@ class Ebook(BookManagement):
     def add_ebook(self, isbn, title, author, category, link, file_size):
         print("\n========== Add E-Book ==========")
         if isbn in self.books:
-            print(f"Book with ISBN {ebook.isbn} Already Exists!")
+            print(f"Ebook Library is Empty!")
         else:
             ebook = {
                 "Title": title,
