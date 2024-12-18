@@ -156,6 +156,5 @@ class HandleLicense:
             print("No licenses found.")
             return []
         for license_ in self.licenses:
-            print(f"\nLicense No: {license_['license_no']},
-                  \nLicense Period: {license_['license_period']}")
+            print(f"\nLicense No: {license_['license_no']}\nLicense Period: {license_['license_period']}")
         return self.licenses

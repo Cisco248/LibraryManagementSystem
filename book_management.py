@@ -170,7 +170,8 @@ class Ebook(BookManagement):
         """
         print("\n========== Add E-Book ==========")
         if any(ebook['ISBN'] == ebook_data['ISBN'] for ebook in self.books):
-            return f"Error: E-Book with ISBN '{ebook_data['ISBN']}' already exists."
+            print(f"Error: E-Book with ISBN '{ebook_data['ISBN']}' already exists.")
+            return
         self.books.append(ebook_data)
         print(f"E-Book '{ebook_data['Title']}' added successfully!")
 

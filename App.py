@@ -8,8 +8,11 @@ a cohesive library management system.
 """
 from book_management import PrintedBook, Ebook
 from author_management import HandleAuthor, HandleLicense
-from member_management import Member, Employee
+from member_management import Member
 
+"""
+Manages main app calling the all the class with parameters.
+"""
 def main():
     # Initialize objects
     pbk = PrintedBook()
@@ -17,7 +20,6 @@ def main():
     ha = HandleAuthor()
     hl = HandleLicense()
     mm = Member()
-    # emp = Employee()
 
     # Printed Book Operations
     pbk.add_book({
