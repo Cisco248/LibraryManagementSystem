@@ -1,4 +1,13 @@
+"""
+Module: BookManagement
+
+This module handles book-related operations, such as searching for books 
+and displaying book details.
+"""
 class BookManagement:
+    """
+    Manages books by providing functionality to search, display, and update books.
+    """
     def __init__(self, title=None, isbn=None, author_name=None, category='Unknown', status='Available', link='', file_size=''):
         self.title = title
         self.isbn = isbn

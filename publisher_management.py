@@ -1,4 +1,13 @@
+"""
+Module: PublisherManagement
+
+This module handles operations related to publishers, such as adding new publishers
+and managing publisher information.
+"""
 class HandlePublisher:
+    """
+    Handles publisher-related operations like adding and updating publisher records.
+    """
     def __init__(self, publisher_id=None, publisher_name=None, address=None, gov_reg_no=None, agreement_time=None):
         self.publisher_id = publisher_id
         self.publisher_name = publisher_name
@@ -20,7 +29,7 @@ class HandlePublisher:
                 "Agreement Time": agreement_time
             }
             self.publishers.append(publisher)
-            print(f"Publisher '{publisher_id}' Added Successfully!")            
+            print(f"Publisher '{publisher_id}' Added Successfully!")
             return
 
     def edit_publisher(self, publisher_id, new_publisher_name, new_address, new_gov_reg_no, new_agreement_time):
@@ -35,7 +44,7 @@ class HandlePublisher:
                     publisher["Gov Reg No"] = new_gov_reg_no
                 if new_agreement_time:
                     publisher["Agreement Time"] = new_agreement_time
-                print(f"Publisher ID: {publisher_id}\Publisher Name: {new_publisher_name}\nAddress: {new_address}\nGov Reg No: {new_gov_reg_no}\nAgreement Period: {new_agreement_time}\n>>>>> Updated Successfully!")
+                print(f"Publisher ID: {publisher_id}\nPublisher Name: {new_publisher_name}\nAddress: {new_address}\nGov Reg No: {new_gov_reg_no}\nAgreement Period: {new_agreement_time}\n>>>>> Updated Successfully!")
         return f"Publisher is Not Found"
 
     def get_publisher(self):
@@ -45,7 +54,7 @@ class HandlePublisher:
             print("\n========== Publisher Details ==========")
             for publisher in self.publishers:
                 print(f"\nPublisher ID: {publisher['Publisher ID']}\nPublisher Name: {publisher['Publisher Name']}\nAddress: {publisher['Address']}\nGov Reg No: {publisher['Gov Reg No']}\nAgreement Period: {publisher['Agreement Time']}")
-    
+
     def delete_publisher(self, publisher_id):
         print("\n========== Delete Publisher ==========")
         for publisher in self.publishers:
@@ -70,7 +79,7 @@ class HandlePublisherLicense(HandlePublisher):
                 "License Period": license_period,
             }
             self.publishers.append(publisher)
-            print(f"License '{license_no}' Added Successfully!")            
+            print(f"License '{license_no}' Added Successfully!")
             return
 
     def update_publisher_license(self, license_no, license_period):
@@ -83,7 +92,7 @@ class HandlePublisherLicense(HandlePublisher):
                     publisher["License Period"] = license_period
                 print(f"License No: {license_no}\nLicense Period: {license_period}\n>>>>> Updated Successfully!")
         return f"Publisher Not Found"
-    
+
     def get_publisher_license(self):
         if not self.publishers:
             print("List is Empty.")

@@ -1,4 +1,13 @@
+"""
+Module: AuthorManagement
+
+This module handles the management of authors, including adding, listing, 
+and retrieving author details.
+"""
 class HandleAuthor:
+    """
+    Handles author-related operations such as adding, listing, and updating authors.
+    """
     def __init__(self, author_id=None, author_name=None, address=None, gov_reg_no=None, agreement_time=None):
         self.author_id = author_id
         self.author_name = author_name

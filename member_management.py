@@ -1,4 +1,13 @@
+"""
+Module: MemberManagement
+
+This module handles operations related to library members, such as adding members
+and managing their details.
+"""
 class Member:
+    """
+    Handles member-related operations like adding and updating member records.
+    """
     def __init__(self, member_id=None, member_name=None, contact_no=None, age=0, membership_type=None, membership_status=None):
         self.member_id = member_id
         self.member_name = member_name
