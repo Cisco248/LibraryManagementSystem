@@ -52,11 +52,11 @@ The Library Management System is a Python-based application designed to manage b
         library-management-system/
         ├── Diagrams/                        # Project Diagram
         │   ├── 22UG2-0004_ClassDiagram.png  # Book management module
-        ├── Models/
-        │   ├── BookManagement.py            # Book management module
-        │   ├── MemberManagement.py          # Member management module
-        │   ├── PublisherManagement.py       # Publisher management module
-        │   ├── AuthorManagement.py          # Author management module
+        |
+        ├── BookManagement.py                # Book management module
+        ├── MemberManagement.py              # Member management module
+        ├── PublisherManagement.py           # Publisher management module
+        ├── AuthorManagement.py              # Author management module
         ├── App.py                           # Main application file
         └── .gitignore                       # Git ignore file
 ```
