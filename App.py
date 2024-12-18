@@ -6,7 +6,6 @@ It integrates functionalities from the `BookManagement`,
 `AuthorManagement`, and `MemberManagement` modules to form
 a cohesive library management system.
 """
-
 from book_management import PrintedBook, Ebook
 from author_management import HandleAuthor, HandleLicense
 from member_management import Member, Employee
