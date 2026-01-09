@@ -1,12 +1,10 @@
-"""
-Module: BookManagement
-
-This module handles book-related operations, such as searching for books,
-displaying book details, and managing printed and e-books.
-"""
-
 class BookManagement:
     """
+    Module: BookManagement
+
+    This module handles book-related operations, such as searching for books,
+    displaying book details, and managing printed and e-books.
+    
     Manages books by providing functionality to search, display, and update books.
     """
     def __init__(self):
