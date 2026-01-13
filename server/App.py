@@ -7,13 +7,9 @@ It integrates functionalities from the `BookManagement`,
 a cohesive library management system.
 """
 
-from logic.book_management import PrintedBook, Ebook
-from logic.author_management import HandleAuthor, HandleLicense
-from logic.member_management import Member
-
-import tkinter as tk
-from tkinter import ttk, messagebox, scrolledtext
-import json
+# from logic.services.book_management import PrintedBook, Ebook
+# from logic.services.author_management import HandleAuthor, HandleLicense
+# from logic.services.member_management import Member
 
 
 def main():
@@ -28,52 +24,6 @@ def main():
     mm = Member()
 
     # Printed Book Operations
-    pbk.add_book(
-        {
-            "Title": "Guitar Lesson 1",
-            "ISBN": "111111",
-            "Author": "Mark",
-            "Category": "Music",
-            "Status": "Available",
-        }
-    )
-    pbk.add_book(
-        {
-            "Title": "Python Basics",
-            "ISBN": "222222",
-            "Author": "John Doe",
-            "Category": "Programming",
-            "Status": "Available",
-        }
-    )
-    pbk.add_book(
-        {
-            "Title": "Cooking 101",
-            "ISBN": "333333",
-            "Author": "Jane Smith",
-            "Category": "Cooking",
-            "Status": "Unavailable",
-        }
-    )
-    pbk.add_book(
-        {
-            "Title": "Astronomy Guide",
-            "ISBN": "444444",
-            "Author": "Dr. Star",
-            "Category": "Science",
-            "Status": "Available",
-        }
-    )
-    pbk.add_book(
-        {
-            "Title": "History of Art",
-            "ISBN": "555555",
-            "Author": "Leonardo",
-            "Category": "Art",
-            "Status": "Available",
-        }
-    )
-    pbk.get_book_details()
 
     pbk.delete_book("111111")
     pbk.get_book_details()
@@ -206,11 +156,6 @@ def main():
     hl.list_licenses()
 
     # Member Operations
-    mm.register_member("S001", "Andrew Collison", "+94123456789", 23, "Staff", None)
-    mm.register_member("S002", "Anton Newtown", "+94234567891", 20, "Client", "Silver")
-    mm.register_member("S003", "Mark Antony", "+94345678912", 25, "Staff", None)
-    mm.register_member("S004", "Henry Wright", "+94456789123", 18, "Client", "Silver")
-    mm.get_member_details()
 
 
 if __name__ == "__main__":

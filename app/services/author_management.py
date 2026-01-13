@@ -5,6 +5,7 @@ This module handles the management of authors and licenses, including adding,
 editing, listing, and deleting author and license details.
 """
 
+
 class HandleAuthor:
     """
     Handles author-related operations such as adding, listing, updating, and deleting authors.
@@ -16,7 +17,7 @@ class HandleAuthor:
         """
         self.authors = []
 
-    def add_author(self, author_data):
+    def add_author(self, author_data: dict):
         """
         Adds a new author to the system.
 
@@ -32,14 +33,16 @@ class HandleAuthor:
             str: Success message or error message if the author already exists.
         """
         print("\n========== Add Author ==========")
-        if any(author['author_id'] == author_data['author_id'] for author in self.authors):
+        if any(
+            author["author_id"] == author_data["author_id"] for author in self.authors
+        ):
             print(f"Error: Author with ID '{author_data['author_id']}' already exists.")
             return
         self.authors.append(author_data)
         print(f"Author '{author_data['author_name']}' added successfully!")
         return
 
-    def edit_author(self, author_id, updated_data):
+    def edit_author(self, author_id: str, updated_data: dict):
         """
         Updates an existing author's details.
 
@@ -52,14 +55,16 @@ class HandleAuthor:
         """
         print("\n========== Update Author ==========")
         for author in self.authors:
-            if author['author_id'] == author_id:
-                author.update({key: value for key, value in updated_data.items() if value})
+            if author["author_id"] == author_id:
+                author.update(
+                    {key: value for key, value in updated_data.items() if value}
+                )
                 print(f"Author '{author_id}' updated successfully!")
                 return
         print(f"Error: Author with ID '{author_id}' not found.")
         return
 
-    def list_authors(self):
+    def list_authors(self) -> list:
         """
         Lists all authors in the system.
 
@@ -71,12 +76,14 @@ class HandleAuthor:
             print("No authors found.")
             return []
         for author in self.authors:
-            print(f"\nAuthor ID: {author['author_id']}\nAuthor Name: {author['author_name']}\n"
-                  f"Address: {author['address']}\nGov Reg No: {author['gov_reg_no']}\n"
-                  f"Agreement Period: {author['agreement_time']}")
+            print(
+                f"\nAuthor ID: {author['author_id']}\nAuthor Name: {author['author_name']}\n"
+                f"Address: {author['address']}\nGov Reg No: {author['gov_reg_no']}\n"
+                f"Agreement Period: {author['agreement_time']}"
+            )
         return self.authors
 
-    def delete_author(self, author_id):
+    def delete_author(self, author_id: str):
         """
         Deletes an author from the system.
 
@@ -88,12 +95,13 @@ class HandleAuthor:
         """
         print("\n========== Delete Author ==========")
         for author in self.authors:
-            if author['author_id'] == author_id:
+            if author["author_id"] == author_id:
                 self.authors.remove(author)
                 print(f"Author with ID '{author_id}' deleted successfully.")
                 return
         print(f"Error: Author with ID '{author_id}' not found.")
         return
+
 
 class HandleLicense:
     """
@@ -119,7 +127,10 @@ class HandleLicense:
             str: Success message or error message if the license already exists.
         """
         print("\n========== Add License ==========")
-        if any(license_['license_no'] == license_data['license_no'] for license_ in self.licenses):
+        if any(
+            license_["license_no"] == license_data["license_no"]
+            for license_ in self.licenses
+        ):
             return f"Error: License with number '{license_data['license_no']}' already exists."
         self.licenses.append(license_data)
         print(f"License '{license_data['license_no']}' added successfully!")
@@ -137,8 +148,10 @@ class HandleLicense:
         """
         print("\n========== Update License ==========")
         for license_ in self.licenses:
-            if license_['license_no'] == license_no:
-                license_.update({key: value for key, value in updated_data.items() if value})
+            if license_["license_no"] == license_no:
+                license_.update(
+                    {key: value for key, value in updated_data.items() if value}
+                )
                 print(f"License '{license_no}' updated successfully!")
                 return
         print(f"Error: License with number '{license_no}' not found.")
@@ -156,5 +169,7 @@ class HandleLicense:
             print("No licenses found.")
             return []
         for license_ in self.licenses:
-            print(f"\nLicense No: {license_['license_no']}\nLicense Period: {license_['license_period']}")
+            print(
+                f"\nLicense No: {license_['license_no']}\nLicense Period: {license_['license_period']}"
+            )
         return self.licenses
