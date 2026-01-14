@@ -1,5 +1,0 @@
-member_id, member_name, contact_no, age, membership_type, membership_status
-S001, Andrew Collison, +94123456789, 23, Staff, None
-S002, Anton Newtown, +94234567891, 20, Client, Silver
-S003, Mark Antony, +94345678912, 25, Staff, None
-S004, Henry Wright, +94456789123, 18, Client, Silver

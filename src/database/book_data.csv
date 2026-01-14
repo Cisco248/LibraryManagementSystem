@@ -1,0 +1,51 @@
+ISBN, Title, Author, Category, Status
+111111, Guitar Lesson 1, Mark, Music, Available
+222222, Python Basics, John Doe, Programming, Available
+333333, Cooking 101, Jane Smith, Cooking, Unavailable
+444444, Astronomy Guide, Dr. Star, Science, Available
+555555, History of Art, Leonardo, Art, Available
+666666, Java Essentials, Alice Brown, Programming, Available
+777777, French for Beginners, Pierre Dupont, Language, Unavailable
+888888, Yoga for All, Maya Patel, Health, Available
+999999, World Geography, Tom Wilson, Education, Available
+101010, Painting Techniques, Anna Lee, Art, Available
+111112, Data Science Intro, Michael Chen, Programming, Available
+121212, Guitar Lesson 2, Mark, Music, Available
+131313, Baking Secrets, Rachel Green, Cooking, Available
+141414, Astronomy Deep Dive, Dr. Star, Science, Unavailable
+151515, History of Europe, William Clark, History, Available
+161616, Spanish Basics, Lucia Gomez, Language, Available
+171717, Meditation Guide, Sita Sharma, Health, Available
+181818, Algebra Made Easy, Henry White, Education, Available
+191919, Sketching Tips, Leo Martinez, Art, Available
+202020, Python Advanced, John Doe, Programming, Unavailable
+212121, Piano Lessons 1, Clara Adams, Music, Available
+222223, Vegan Cooking, Jane Smith, Cooking, Available
+232323, Physics 101, Isaac Newton, Science, Available
+242424, Ancient Civilizations, Howard Carter, History, Available
+252525, Italian Basics, Marco Rossi, Language, Available
+262626, Fitness at Home, Tom Brown, Health, Unavailable
+272727, Geometry Essentials, Sarah Miller, Education, Available
+282828, Watercolor Techniques, Anna Lee, Art, Available
+292929, JavaScript Basics, Alice Brown, Programming, Available
+303030, Guitar Lesson 3, Mark, Music, Available
+313131, Desserts Masterclass, Rachel Green, Cooking, Unavailable
+323232, Chemistry for Teens, Marie Curie, Science, Available
+333334, History of Asia, Sun Tzu, History, Available
+343434, German for Beginners, Hans Schmidt, Language, Available
+353535, Healthy Eating, Maya Patel, Health, Available
+363636, Calculus Basics, Henry White, Education, Available
+373737, Oil Painting Guide, Leo Martinez, Art, Available
+383838, C++ Programming, Alice Brown, Programming, Available
+393939, Piano Lessons 2, Clara Adams, Music, Available
+404040, Quick Meals, Jane Smith, Cooking, Available
+414141, Astronomy Experiments, Dr. Star, Science, Available
+424242, Modern History, William Clark, History, Unavailable
+434343, French Advanced, Pierre Dupont, Language, Available
+444445, Mindfulness, Sita Sharma, Health, Available
+454545, Trigonometry Simplified, Sarah Miller, Education, Available
+464646, Portrait Drawing, Anna Lee, Art, Available
+474747, Python Projects, John Doe, Programming, Available
+484848, Guitar Lesson 4, Mark, Music, Available
+494949, Baking Cakes, Rachel Green, Cooking, Available
+505050, Science Experiments, Isaac Newton, Science, Available

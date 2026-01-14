@@ -1,8 +1,8 @@
-from tkinter import Entry, ttk
-from app.services.book_management import PrintedBook
-from app.helpers.container_frame import custom_container_without_label
+from tkinter import ttk
+from repository import BookRepository
+from views.widgets import custom_container_without_label
 
-pb = PrintedBook()
+pb = BookRepository()
 
 
 def handle_search(
@@ -20,7 +20,7 @@ def handle_search(
         target.config(text="Enter ISBN here")
         return
 
-    book = pb.find_book(val)
+    book = pb.get_book(val)
 
     target.config(text=str(book))
 

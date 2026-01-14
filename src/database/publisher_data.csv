@@ -1,0 +1,51 @@
+publisher_id, publisher_name, address, gov_reg_no, agreement_time
+P001, TechBooks, 12 Maple Street, G500001, 2022-01-10
+P002, EduPub, 45 Oak Avenue, G500002, 2021-06-18
+P003, GlobalPress, 78 Pine Lane, G500003, 2023-03-12
+P004, InfoHouse, 90 Cedar Road, G500004, 2022-11-08
+P005, KnowledgeWorks, 34 Birch Street, G500005, 2021-09-20
+P006, LearnWell, 56 Spruce Avenue, G500006, 2023-02-25
+P007, BrightBooks, 23 Elm Street, G500007, 2021-12-15
+P008, StudyPoint, 67 Willow Lane, G500008, 2022-08-02
+P009, PrimeReads, 89 Aspen Road, G500009, 2022-05-18
+P010, MindSpace, 12 Poplar Street, G500010, 2023-01-14
+P011, NextGen Publishers, 45 Cherry Avenue, G500011, 2022-04-23
+P012, Horizon Press, 78 Magnolia Lane, G500012, 2021-09-09
+P013, Alpha Publications, 90 Cypress Road, G500013, 2022-07-16
+P014, Insight Books, 34 Dogwood Street, G500014, 2021-11-05
+P015, BrightMind, 56 Hawthorn Avenue, G500015, 2023-03-28
+P016, EduWorld, 23 Alder Street, G500016, 2022-02-10
+P017, Apex Books, 67 Beech Lane, G500017, 2021-08-22
+P018, Vision Press, 89 Fir Road, G500018, 2022-12-12
+P019, Global Knowledge, 12 Linden Street, G500019, 2023-01-30
+P020, MasterRead, 45 Palm Avenue, G500020, 2021-05-25
+P021, Prime Learning, 78 Sycamore Lane, G500021, 2022-06-08
+P022, EliteBooks, 90 Sequoia Road, G500022, 2023-02-14
+P023, Innovate Press, 34 Maple Street, G500023, 2022-03-19
+P024, EduMax, 56 Oak Avenue, G500024, 2021-10-02
+P025, KnowledgePoint, 23 Pine Lane, G500025, 2022-09-18
+P026, ScholarBooks, 67 Cedar Road, G500026, 2023-04-05
+P027, BrightRead, 89 Birch Street, G500027, 2021-12-29
+P028, LearnSmart, 12 Spruce Avenue, G500028, 2022-08-16
+P029, MindWorks, 45 Elm Street, G500029, 2023-03-21
+P030, Insightful Press, 78 Willow Lane, G500030, 2022-05-09
+P031, KnowledgeHub, 90 Aspen Road, G500031, 2021-07-12
+P032, StudyWorld, 34 Poplar Street, G500032, 2023-02-02
+P033, EduVision, 56 Cherry Avenue, G500033, 2022-11-21
+P034, BrightFuture, 23 Magnolia Lane, G500034, 2021-06-15
+P035, Apex Learning, 67 Cypress Road, G500035, 2023-01-08
+P036, PrimeMind, 89 Dogwood Street, G500036, 2022-03-26
+P037, MindSphere, 12 Hawthorn Avenue, G500037, 2021-09-30
+P038, KnowledgeTree, 45 Alder Street, G500038, 2022-07-05
+P039, StudyPoint Plus, 78 Beech Lane, G500039, 2023-04-14
+P040, Insight Press, 90 Fir Road, G500040, 2022-02-17
+P041, BrightWorld, 34 Linden Street, G500041, 2021-08-08
+P042, Alpha Learning, 56 Palm Avenue, G500042, 2022-10-23
+P043, ScholarPoint, 23 Sycamore Lane, G500043, 2023-03-04
+P044, Visionary Press, 67 Sequoia Road, G500044, 2022-06-11
+P045, EduSphere, 89 Maple Street, G500045, 2021-11-29
+P046, GlobalMind, 12 Oak Avenue, G500046, 2022-09-13
+P047, NextLevel Books, 45 Pine Lane, G500047, 2023-01-19
+P048, InsightHub, 78 Cedar Road, G500048, 2022-05-21
+P049, BrightMind Plus, 90 Birch Street, G500049, 2021-07-27
+P050, LearnSphere, 34 Spruce Avenue, G500050, 2023-04-06

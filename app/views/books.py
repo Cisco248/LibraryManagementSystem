@@ -1,131 +1,204 @@
-from app.components import search_component, details_component, button_toolbar
+"""
+Book View Module
+
+This module contains the BookView class and related functions for managing
+the book management interface in the library management system.
+"""
+
 from tkinter import ttk
-from app.modules.button_click_module import BookActionController
-from app.modules.search_module import handle_search
+from repository.book_repo import BookRepository
+from controllers.book_controller import BookActionController
+from .components import search_component, details_component, button_toolbar
+
+book_action = BookActionController(BookRepository())
 
 
-controller = BookActionController()
+class BookView:
+    """
+    Manages the user interface for book operations.
+
+    This class handles the creation and layout of GUI components for both
+    printed books and e-books, including search functionality, action buttons,
+    and detailed form inputs.
+
+    Attributes:
+        controller: The controller instance that handles business logic.
+    """
+
+    def __init__(self) -> None:
+        """
+        Initialize the BookView.
+        """
+        pass
+
+    def create_ebooks_tab(self, parent: ttk.Frame) -> None:
+        """
+        Create and configure the e-books tab interface.
+
+        This method sets up the complete UI for managing electronic books, including:
+        - Search functionality by ISBN
+        - Action buttons (Add, Update, Delete, Clear)
+        - Detailed form for e-book information
+
+        Args:
+            parent_container (ttk.Frame): The parent frame to contain all components.
+
+        Returns:
+            None
+        """
+
+        search_component(
+            parent,
+            title="Search Book",
+            button_text="Search",
+            label_text="ISBN: ",
+        ).grid(
+            row=0,
+            column=0,
+            padx=10,
+            pady=10,
+        )
+
+        book_form = details_component(
+            parent,
+            title="Book Details",
+            labels=[
+                "ISBN",
+                "Title",
+                "Author",
+                "Publisher",
+                "Status",
+            ],
+            name_list=[
+                "isbn",
+                "title",
+                "author",
+                "publisher",
+                "status",
+            ],
+        )
+        book_form.grid(
+            row=2,
+            column=0,
+            padx=10,
+            pady=10,
+        )
+
+        button_toolbar(
+            parent,
+            button_data={
+                "Add": book_action.handle_add(book_form),
+                "Update": book_action,
+                "Delete": book_action,
+                "Clear": book_action,
+            },
+        ).grid(
+            row=1,
+            column=0,
+            padx=10,
+            pady=10,
+        )
+
+    def create_printed_books_tab(self, parent: ttk.Frame) -> None:
+        """
+        Create and configure the printed books tab interface.
+
+        This method sets up the complete UI for managing printed books, including:
+        - Search functionality by ISBN
+        - Action buttons (Add, Update, Delete, Clear)
+        - Detailed form for book information
+
+        Args:
+            parent_container (ttk.Frame): The parent frame to contain all components.
+
+        Returns:
+            None
+        """
+        search_component(
+            parent,
+            title="Search Book",
+            button_text="Search",
+            label_text="ISBN: ",
+        ).grid(
+            row=0,
+            column=0,
+            padx=10,
+            pady=10,
+        )
+
+        button_toolbar(
+            parent,
+            button_data={
+                "Add": book_action,
+                "Update": book_action,
+                "Delete": book_action,
+                "Clear": book_action,
+            },
+        ).grid(
+            row=1,
+            column=0,
+            padx=10,
+            pady=10,
+        )
+
+        book_form = details_component(
+            parent=parent,
+            title="Book Details",
+            labels=[
+                "ISBN",
+                "Title",
+                "Author",
+                "Publisher",
+                "Status",
+            ],
+            name_list=[
+                "isbn",
+                "title",
+                "author",
+                "publisher",
+                "status",
+            ],
+        )
+        book_form.grid(
+            row=2,
+            column=0,
+            padx=10,
+            pady=10,
+        )
 
 
-def e_books_gui(container):
+def create_book_interface(container: ttk.Frame, controller=None) -> ttk.Notebook:
+    """
+    Create the complete book management interface with tabbed navigation.
 
-    search_component(
-        container,
-        title="Search Book",
-        button_text="Search",
-        label_text="ISBN: ",
-    ).grid(
-        row=0,
-        column=0,
-        padx=10,
-        pady=10,
-    )
+    This function creates a notebook widget containing separate tabs for
+    printed books and e-books, each with their own management interface.
 
-    button_toolbar(
-        container,
-        bd={
-            "Add": lambda: controller.handle_add(target=book_form),
-            "Update": lambda: controller.handle_update,
-            "Delete": controller.handle_delete,
-            "Clear": controller.handle_clear,
-        },
-    ).grid(
-        row=1,
-        column=0,
-        padx=10,
-        pady=10,
-    )
+    Args:
+        parent_container (ttk.Frame): The parent container to hold the notebook.
+        controller: Optional controller instance for handling business logic.
 
-    book_form = details_component(
-        container,
-        title="Book Details",
-        label_text=[
-            "ISBN",
-            "Title",
-            "Author",
-            "Publisher",
-            "Status",
-        ],
-        name_list=[
-            "isbn",
-            "title",
-            "author",
-            "publisher",
-            "status",
-        ],
-    )
-    book_form.grid(
-        row=2,
-        column=0,
-        padx=10,
-        pady=10,
-    )
+    Returns:
+        ttk.Notebook: The notebook widget containing both book management tabs.
 
+    Example:
+        >>> root = tk.Tk()
+        >>> main_frame = ttk.Frame(root)
+        >>> book_notebook = create_book_interface(main_frame, my_controller)
+        >>> book_notebook.pack(fill="both", expand=True)
+    """
 
-def printed_books_gui(container):
+    notebook = ttk.Notebook(container)
+    notebook.pack(pady=10, expand=True, fill="both")
 
-    search_component(
-        container,
-        title="Search Book",
-        button_text="Search",
-        label_text="ISBN: ",
-    ).grid(
-        row=0,
-        column=0,
-        padx=10,
-        pady=10,
-    )
+    book_view = BookView()
 
-    button_toolbar(
-        container,
-        bd={
-            "Add": lambda: controller.handle_add(target=book_form),
-            "Update": controller.handle_update,
-            "Delete": controller.handle_update,
-            "Clear": controller.handle_clear,
-        },
-    ).grid(
-        row=1,
-        column=0,
-        padx=10,
-        pady=10,
-    )
+    printed_book_frame = ttk.Frame(notebook)
+    notebook.add(printed_book_frame, text="Printed Books")
+    book_view.create_printed_books_tab(printed_book_frame)
 
-    book_form = details_component(
-        parent=container,
-        title="Book Details",
-        label_text=[
-            "ISBN",
-            "Title",
-            "Author",
-            "Publisher",
-            "Status",
-        ],
-        name_list=[
-            "isbn",
-            "title",
-            "author",
-            "publisher",
-            "status",
-        ],
-    )
-    book_form.grid(
-        row=2,
-        column=0,
-        padx=10,
-        pady=10,
-    )
+    ebooks_frame = ttk.Frame(notebook)
+    notebook.add(ebooks_frame, text="E Books")
+    book_view.create_ebooks_tab(ebooks_frame)
 
-
-def book_gui(c):
-
-    book_tab = ttk.Notebook(c)
-    book_tab.pack(pady=10, expand=True, fill="both")
-
-    pb = ttk.Frame(book_tab)
-    book_tab.add(pb, text="Printed Books")
-    printed_books_gui(pb)
-
-    eb = ttk.Frame(book_tab)
-    book_tab.add(eb, text="E Books")
-    e_books_gui(eb)
+    return notebook

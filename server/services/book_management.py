@@ -1,3 +1,6 @@
+from src.models.book_model import BookModel
+
+
 class BookManagement:
     """
     Module: BookManagement
@@ -14,7 +17,7 @@ class BookManagement:
         """
         self.books = []
 
-    def get_book_details(self) -> str | list[str]:
+    def get_book_details(self, data: BookModel) -> str | list[str]:
         """
         Displays details of all books in the library.
 
@@ -25,27 +28,22 @@ class BookManagement:
         if not self.books:
             return "Library is Empty."
         for book in self.books:
-            print(
-                f"Title: {book['Title']}\nISBN: {book['ISBN']}\nAuthor: {book['Author']}\n"
-                f"Category: {book['Category']}\nStatus: {book['Status']}\n"
-            )
+            print(book)
         return self.books
 
-    def add_book(self, book_data: dict[str, str]) -> str:
+    def add_book(self, data: BookModel):
         """
         Adds a book to the library.
 
         Args:
-            book_data (dict): A dictionary containing book details.
-
+            data (BookModel): Book model object.
         Returns:
-            str: Success or error message.
+            str | BookModel: Error message string or the added BookModel.
         """
-        print("\n========== Add Book ==========")
-        if (book["isbn"] == book_data["isbn"] for book in self.books):
-            return f"Error: Book with ISBN '{book_data['isbn']}' already exists."
-        self.books.append(book_data)
-        return f"Book '{book_data['title']}' added successfully!"
+        if any(book["isbn"] == data.isbn for book in self.books):
+            return f"Error: Book with ISBN '{data.isbn}' already exists."
+        self.books.append(data.to_dict())
+        return data
 
     def delete_book(self, isbn: str) -> str:
         """
@@ -113,21 +111,21 @@ class PrintedBook(BookManagement):
     Manages printed books with additional features to check and update status.
     """
 
-    def check_status(self, t: str) -> str:
+    def check_status(self, title: str) -> str:
         """
         Checks the availability status of a printed book.
 
         Args:
-            t (str): The title of the book.
+            title (str): The title of the book.
 
         Returns:
             str: Status of the book or an error message if the book is not found.
         """
         print("\n========== Check Book Status ==========")
         for book in self.books:
-            if book["Title"] == t:
+            if book["Title"] == title:
                 return f"Title: {book['Title']}\nStatus: {book['Status']}"
-        return f"Error: Book with title '{t}' not found."
+        return f"Error: Book with title '{title}' not found."
 
     def update_status(self, title: str, next_status: str) -> str:
         """
