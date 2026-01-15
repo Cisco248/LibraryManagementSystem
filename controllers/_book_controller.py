@@ -5,10 +5,11 @@ This module contains controller classes for managing book operations in the
 library management system, following the MVC architecture pattern.
 """
 
+import csv
 from tkinter import messagebox, ttk
 import tkinter as tk
-from models.book_model import BookModel
-from repository.book_repo import BookRepository
+from models._book_model import BookModel
+from repository._book_repository import BookRepository
 
 
 class BookActionController:
@@ -29,16 +30,16 @@ class BookActionController:
         >>> controller = BookActionController(repository)
     """
 
-    def __init__(self, repository: BookRepository) -> None:
+    def __init__(self) -> None:
         """
         Initialize the BookActionController.
 
         Args:
             repository: Repository instance for data operations.
         """
-        self.repository = repository
+        self.repository = BookRepository()
 
-    def handle_add(self, target: ttk.Widget):
+    def handle_add(self, data: dict):
         """
         Collect data from entry widgets in a container and add a book.
 
@@ -65,32 +66,8 @@ class BookActionController:
             >>> result = controller.handle_add(book_form_frame)
         """
         try:
-            book_data = {}
-
-            for widget in target.winfo_children():
-                if isinstance(widget, ttk.Entry):
-                    widget.config(state="normal")
-                    key = widget.winfo_name()
-                    value = widget.get()
-                    if value:
-                        book_data[key] = value
-
-            if not book_data:
-                messagebox.showerror("Error: No Data to Add. Fill the Fields")
-                return None
-
-            book_model = BookModel(**book_data)
-            res = self.repository.add_book(data=book_model)
-
-            if isinstance(res, str):
-                messagebox.showerror("Error: ", res)
-                return None
-            else:
-                messagebox.showinfo(
-                    "Success", f"Book {book_model.title} Added Successfully!"
-                )
-                self.handle_clear(target)
-                return res
+            book = BookModel(**data)
+            return self.repository.add_book(book)
 
         except ValueError as e:
             messagebox.showerror("Validation Error", str(e))
@@ -124,49 +101,49 @@ class BookActionController:
                 widget.delete(0, tk.END)
                 widget.config(state=current_state)
 
-    def handle_delete(self, isbn: str) -> bool:
-        """
-        Delete a book from the repository by ISBN.
+    # def handle_delete(self, isbn: str) -> bool:
+    #     """
+    #     Delete a book from the repository by ISBN.
 
-        Args:
-            isbn (str): The ISBN of the book to delete.
+    #     Args:
+    #         isbn (str): The ISBN of the book to delete.
 
-        Returns:
-            bool: True if deletion was successful, False otherwise.
+    #     Returns:
+    #         bool: True if deletion was successful, False otherwise.
 
-        Example:
-            >>> success = controller.handle_delete("978-0-123456-78-9")
-            >>> if success:
-            ...     print("Book deleted successfully")
-        """
-        try:
-            if not isbn:
-                messagebox.showerror("Error", "Please provide an ISBN to delete.")
-                return False
+    #     Example:
+    #         >>> success = controller.handle_delete("978-0-123456-78-9")
+    #         >>> if success:
+    #         ...     print("Book deleted successfully")
+    #     """
+    #     try:
+    #         if not isbn:
+    #             messagebox.showerror("Error", "Please provide an ISBN to delete.")
+    #             return False
 
-            # Confirm deletion
-            confirm = messagebox.askyesno(
-                "Confirm Deletion",
-                f"Are you sure you want to delete the book with ISBN: {isbn}?",
-            )
+    #         # Confirm deletion
+    #         confirm = messagebox.askyesno(
+    #             "Confirm Deletion",
+    #             f"Are you sure you want to delete the book with ISBN: {isbn}?",
+    #         )
 
-            if not confirm:
-                return False
+    #         if not confirm:
+    #             return False
 
-            result = self.repository.delete_book()
+    #         result = self.repository.delete_book()
 
-            if isinstance(result, str) and "Error" not in result:
-                messagebox.showinfo("Success", result)
-                return True
-            else:
-                messagebox.showerror(
-                    "Error", result if isinstance(result, str) else "Deletion failed"
-                )
-                return False
+    #         if isinstance(result, str) and "Error" not in result:
+    #             messagebox.showinfo("Success", result)
+    #             return True
+    #         else:
+    #             messagebox.showerror(
+    #                 "Error", result if isinstance(result, str) else "Deletion failed"
+    #             )
+    #             return False
 
-        except Exception as e:
-            messagebox.showerror("Error", f"Failed to delete book: {str(e)}")
-            return False
+    #     except Exception as e:
+    #         messagebox.showerror("Error", f"Failed to delete book: {str(e)}")
+    #         return False
 
     def handle_update(self, target: ttk.Widget):
         """
@@ -234,35 +211,35 @@ class BookActionController:
             messagebox.showerror("Error", f"Failed to update book: {str(e)}")
             return None
 
-    def handle_search(self, search_term: str) -> list:
-        """
-        Search for books matching the search term.
+    # def handle_search(self, search_term: str) -> list:
+    #     """
+    #     Search for books matching the search term.
 
-        Args:
-            search_term (str): The search term (ISBN, title, or author).
+    #     Args:
+    #         search_term (str): The search term (ISBN, title, or author).
 
-        Returns:
-            list: List of matching books.
+    #     Returns:
+    #         list: List of matching books.
 
-        Example:
-            >>> results = controller.handle_search("Python")
-            >>> for book in results:
-            ...     print(book['title'])
-        """
-        try:
-            if not search_term:
-                return self.repository.get_all_books()
+    #     Example:
+    #         >>> results = controller.handle_search("Python")
+    #         >>> for book in results:
+    #         ...     print(book['title'])
+    #     """
+    #     try:
+    #         if not search_term:
+    #             return self.repository.get_all_books()
 
-            # Search by multiple criteria
-            results = self.repository.search_book(
-                isbn=search_term, title=search_term, author=search_term
-            )
+    #         # Search by multiple criteria
+    #         results = self.repository.search_book(
+    #             isbn=search_term, title=search_term, author=search_term
+    #         )
 
-            return results
+    #         return results
 
-        except Exception as e:
-            messagebox.showerror("Error", f"Search failed: {str(e)}")
-            return []
+    #     except Exception as e:
+    #         messagebox.showerror("Error", f"Search failed: {str(e)}")
+    #         return []
 
     def hide_container(self, target: ttk.Widget) -> None:
         """
@@ -306,32 +283,32 @@ class PrintedBookActionController(BookActionController):
         >>> status = controller.handle_check_status("978-0-123456-78-9")
     """
 
-    def handle_status(self, isbn: str) -> str:
-        """
-        Check the availability status of a printed book by ISBN.
+    # def handle_status(self, isbn: str) -> str:
+    #     """
+    #     Check the availability status of a printed book by ISBN.
 
-        Args:
-            isbn (str): The ISBN number of the book to check.
+    #     Args:
+    #         isbn (str): The ISBN number of the book to check.
 
-        Returns:
-            str: A message indicating the book status or not found.
+    #     Returns:
+    #         str: A message indicating the book status or not found.
 
-        Example:
-            >>> controller.handle_check_status("978-0-123456-78-9")
-            'Book is Available'
-        """
-        try:
-            book = self.repository.get_book(isbn)
+    #     Example:
+    #         >>> controller.handle_check_status("978-0-123456-78-9")
+    #         'Book is Available'
+    #     """
+    #     try:
+    #         book = self.repository.get_book(isbn)
 
-            if book:
-                status = book.get("status", "unknown")
-                return f"Book is {status}."
+    #         if book:
+    #             status = book.get("status", "unknown")
+    #             return f"Book is {status}."
 
-            else:
-                return f"Book with ISBN {isbn} not Found"
+    #         else:
+    #             return f"Book with ISBN {isbn} not Found"
 
-        except Exception as e:
-            return f"Error Checking Status: {str(e)}"
+    #     except Exception as e:
+    #         return f"Error Checking Status: {str(e)}"
 
     def handle_update_status(self, isbn: str, new_status: str) -> str:
         """

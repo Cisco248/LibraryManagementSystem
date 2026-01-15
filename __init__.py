@@ -1,17 +1,20 @@
-from .app import controllers, repository, views
-from .server import services
-from .src import models, constants
-from .tests import test_first, test_module, test_second, test_third
+from controllers import _book_controller, search_controller
+from repository import _book_repository
+from views import authors, members, publishers, books, widgets, components
+from models import _book_model, _member_model
+from .services import _book_service
 
 __all__ = [
-    "controllers",
-    "repository",
-    "views",
-    "services",
-    "models",
-    "constants",
-    "test_first",
-    "test_module",
-    "test_second",
-    "test_third",
+    "_book_controller",
+    "search_controller",
+    "_book_repository",
+    "authors",
+    "books",
+    "members",
+    "publishers",
+    "widgets",
+    "components",
+    "_book_model",
+    "_member_model",
+    "_book_service",
 ]

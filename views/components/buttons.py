@@ -1,8 +1,9 @@
 from tkinter import ttk
 from views.widgets import custom_container_without_label
+from views.widgets import Button
 
 
-def button_toolbar(parent: ttk.Widget, button_data: dict) -> ttk.Frame:
+def button_toolbar(parent: ttk.Widget) -> ttk.Frame:
     """
     Create a horizontal toolbar of buttons inside a frame.
 
@@ -22,17 +23,13 @@ def button_toolbar(parent: ttk.Widget, button_data: dict) -> ttk.Frame:
         >>> toolbar.grid(row=0, column=0, sticky="ew")
     """
 
-    # Create a frame without a label
     frame = custom_container_without_label(parent)
+    frame.columnconfigure(
+        1,
+        weight=1,
+    )
 
-    # Create buttons dynamically
-    for i, (text, func) in enumerate(button_data.items()):
-        # Make columns expandable
-        frame.columnconfigure(i, weight=1)
-
-        # Assign the function to the button
-        btn = ttk.Button(frame, text=text, command=func)
-        btn.grid(row=0, column=i, sticky="ew", padx=5, pady=5)
+    Button._add_button(self=dsa, frame=frame, function=(adds))
 
     return frame
 

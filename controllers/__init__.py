@@ -1,4 +1,4 @@
-from .book_controller import (
+from ._book_controller import (
     PrintedBookActionController,
     EBookActionController,
     BookActionController,

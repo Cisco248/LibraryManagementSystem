@@ -6,8 +6,8 @@ the book management interface in the library management system.
 """
 
 from tkinter import ttk
-from repository.book_repo import BookRepository
-from controllers.book_controller import BookActionController
+from repository._book_repository import BookRepository
+from controllers._book_controller import BookActionController
 from .components import search_component, details_component, button_toolbar
 
 book_action = BookActionController(BookRepository())
@@ -86,12 +86,13 @@ class BookView:
 
         button_toolbar(
             parent,
-            button_data={
-                "Add": book_action.handle_add(book_form),
-                "Update": book_action,
-                "Delete": book_action,
-                "Clear": book_action,
-            },
+            text=[
+                "Add",
+                "Update",
+                "Delete",
+                "Clear",
+            ],
+            func=[],
         ).grid(
             row=1,
             column=0,
@@ -128,12 +129,13 @@ class BookView:
 
         button_toolbar(
             parent,
-            button_data={
-                "Add": book_action,
-                "Update": book_action,
-                "Delete": book_action,
-                "Clear": book_action,
-            },
+            text=[
+                "Add",
+                "Update",
+                "Delete",
+                "Clear",
+            ],
+            func=[],
         ).grid(
             row=1,
             column=0,
