@@ -1,59 +1,64 @@
 import tkinter as tk
 from tkinter import ttk
-from ..widgets.container import custom_container_with_label
-from controllers import handle_search
+from typing import Callable
 
 
-def search_component(
-    parent: tk.Widget,
-    title: str,
-    button_text: str,
-    label_text: str,
-) -> ttk.LabelFrame:
+class SearchComponent(ttk.Labelframe):
     """
-    Create a reusable search bar component for Tkinter GUIs.
+    A reusable search bar component inheriting from ttk.LabelFrame.
 
-    The layout is as follows:
-        [Label] [Entry ------------------] [Button]
-        [Result Label (span across columns)]
-
-    Args:
-        parent (tk.Widget): The parent widget where this component will be placed.
-        title (str): The title for the container LabelFrame.
-        button_text (str): Text to display on the search/action button.
-        label_text (str): Text to display next to the input field.
-
-    Returns:
-        ttk.LabelFrame: A LabelFrame containing the search entry, button, and result label.
-                        It is returned unplaced, so the caller can grid/pack/place it.
-
-    Example:
-        >>> frame = search_component(root, "Book Search", "Search", "ISBN:")
-        >>> frame.grid(row=0, column=0, sticky="ew")
+    This component encapsulates a label, an entry field, a button, and a
+    feedback label.
     """
 
-    frame = custom_container_with_label(parent, title)
+    def __init__(
+        self,
+        parent: ttk.Widget,
+        title: str,
+        button_text: str,
+        lable_text: str,
+        command: Callable[[str], None],
+    ):
+        """
+        Initialize the SearchComponent.
 
-    frame.columnconfigure(1, weight=1)
+        Args:
+            parent: The parent widget.
+            title: Title for the LabelFrame.
+            button_text: Text for the action button.
+            label_text: Text for the label next to the input.
+            command: A function to call when the button is clicked.
+                     It receives the current entry text as an argument.
+        """
+        super().__init__(parent, text=title)
+        self.command = command
 
-    ttk.Label(frame, text=label_text).grid(
-        row=0, column=0, padx=(10, 5), pady=10, sticky="w"
-    )
+        self.columnconfigure(1, weight=1)
 
-    entry = ttk.Entry(frame)
-    entry.grid(row=0, column=1, padx=5, pady=10, sticky="ew")
+        self.lbl = ttk.Label(self, text=lable_text)
+        self.lbl.grid(row=0, column=0, padx=4, pady=4)
 
-    result_label = ttk.Label(frame, text="Find Book Entering ISBN")
-    result_label.grid(row=1, column=0, columnspan=3, padx=10, pady=(0, 10), sticky="w")
+        self.search_var = tk.StringVar(value="Enter the ISBN")
+        self.entry = ttk.Entry(self, textvariable=self.search_var, width=30)
+        self.entry.grid(row=0, column=1, padx=8, pady=4, sticky="ew")
 
-    ttk.Button(
-        frame,
-        text=button_text,
-        command=lambda: handle_search(
-            source=entry,
-            target=result_label,
-            parent=frame,
-        ),
-    ).grid(row=0, column=2, padx=(5, 10), pady=10)
+        self.entry.bind("<Return>", lambda event: self._on_search())
 
-    return frame
+        self.button = ttk.Button(self, text=button_text, command=self._on_search)
+        self.button.grid(row=0, column=2, padx=8, pady=4)
+
+        self.res_lbl = ttk.Label(self, text="", foreground="grey")
+        self.res_lbl.grid(row=1, column=0, columnspan=3, padx=4, pady=4, sticky="ew")
+
+    def _on_search(self):
+        """Internal method to handle button clicks."""
+        query = self.search_var.get()
+        if self.command:
+            self.command(query)
+        else:
+            print(f"Search triggered for: {query} (No command bound)")
+
+    def set_feedback(self, message: str, is_error: bool = False):
+        """Helper to update the result label from outside."""
+        color = "red" if is_error else "green"
+        self.res_lbl.config(text=message, foreground=color)

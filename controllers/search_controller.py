@@ -1,45 +1,93 @@
-from tkinter import ttk
-from repository import BookRepository
-from views.widgets import custom_container_without_label
+"""
+Search Controller Module
 
-pb = BookRepository()
+Provides search functionality across different entity types (Books, Members, Authors, Publishers).
+"""
+
+from repository._book_repository import BookRepository
 
 
-def handle_search(
-    source: ttk.Entry,
-    target: ttk.Label,
-    parent: ttk.LabelFrame,
-):
+class SearchController:
     """
-    Reads ISBN from source Entry, searches the book,
-    and displays the result in target Label and a new frame.
+    Controller for handling search operations across the system.
+
+    This controller provides unified search functionality for different entity types,
+    delegating to appropriate repositories.
+
+    Attributes:
+        book_repository (BookRepository): Repository for book search operations.
+
+    Examples:
+        >>> search_ctrl = SearchController()
+        >>> results = search_ctrl.search_books(author="John Doe")
     """
-    val = source.get().strip()
 
-    if not val:
-        target.config(text="Enter ISBN here")
-        return
+    def __init__(self):
+        """Initialize the SearchController with repositories."""
+        self.book_repository = BookRepository()
 
-    book = pb.get_book(val)
+    def search_books(self, **criteria) -> list:
+        """
+        Search for books using multiple criteria.
 
-    target.config(text=str(book))
+        Args:
+            **criteria: Field-value pairs (isbn, title, author, publisher, etc.).
 
-    # Create a new frame inside parent to show book details
-    frame = custom_container_without_label(parent)
-    frame.grid(row=2, column=0, sticky="ew", pady=5, padx=5)
-    frame.columnconfigure(0, weight=1)
+        Returns:
+            list: List of matching books.
 
-    # Show book title in a read-only entry
-    entry = ttk.Entry(frame, width=50, state="readonly")
-    entry.grid(row=2, column=0, sticky="ew", padx=5, pady=5)
+        Example:
+            >>> results = search_ctrl.search_books(author="John", title="Python")
+            >>> for book in results:
+            ...     print(book['title'])
+        """
+        try:
+            return self.book_repository.search_book(**criteria)
+        except Exception as e:
+            raise Exception(f"Error searching books: {str(e)}")
 
-    # Insert text into read-only entry
-    # title = book.get("Title", "Unknown Title")
+    def search_by_title(self, title: str) -> list:
+        """
+        Search for books by title.
 
-    # entry.insert(0, book)
+        Args:
+            title (str): The title to search for.
 
-    # f"Title: {book}",
-    # f"ISBN: {book['ISBN']}",
-    # f"Author: {book['Author']}",
-    # f"Category: {book['Category']}",
-    # f"Status: {book['Status']}\n",
+        Returns:
+            list: List of matching books.
+
+        Example:
+            >>> books = search_ctrl.search_by_title("Python")
+        """
+        return self.search_books(title=title)
+
+    def search_by_author(self, author: str) -> list:
+        """
+        Search for books by author.
+
+        Args:
+            author (str): The author to search for.
+
+        Returns:
+            list: List of matching books.
+
+        Example:
+            >>> books = search_ctrl.search_by_author("John Doe")
+        """
+        return self.search_books(author=author)
+
+    def search_by_isbn(self, isbn: str) -> list:
+        """
+        Search for a book by ISBN.
+
+        Args:
+            isbn (str): The ISBN to search for.
+
+        Returns:
+            list: List containing the book if found, empty list otherwise.
+
+        Example:
+            >>> books = search_ctrl.search_by_isbn("978-0-123456-78-9")
+        """
+        book = self.book_repository.get_book(isbn)
+        return [book] if book else []

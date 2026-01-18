@@ -1,6 +1,7 @@
 from tkinter import ttk
+from controllers._book_controller import BookActionController
 from views.widgets import custom_container_without_label
-from views.widgets import Button
+from views.widgets import AppButton
 
 
 def button_toolbar(parent: ttk.Widget) -> ttk.Frame:
@@ -29,7 +30,18 @@ def button_toolbar(parent: ttk.Widget) -> ttk.Frame:
         weight=1,
     )
 
-    Button._add_button(self=dsa, frame=frame, function=(adds))
+    AppButton(
+        frame,
+        text="ADD",
+        row=1,
+        column=1,
+    )
+    AppButton(
+        frame,
+        text="CLEAR",
+        row=1,
+        column=1,
+    )
 
     return frame
 

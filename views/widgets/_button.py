@@ -1,43 +1,24 @@
 from tkinter import ttk
 
 
-class Button:
-
-    def __init__(self, frame, function) -> None:
-        self.frame = frame
-        self.function = function
-
-    def _add_button(self, frame, function):
-        btn = ttk.Button(
-            frame,
-            text="Add",
-            command=function,
-        )
-
-        btn.grid(
-            row=0,
-            column=0,
-            sticky="ew",
-            padx=5,
-            pady=5,
-        )
-
-    def _update_button(
+class AppButton:
+    def __init__(
         self,
-        frame,
-        function,
-        col=1,
-        row=1,
+        parent: ttk.Widget,
+        text: str,
+        row: int,
+        column: int,
+        colspan: int = 1,
     ):
-        btn = ttk.Button(
-            frame,
-            text="Add",
-            command=function,
+        self.button = ttk.Button(
+            parent,
+            text=text,
         )
 
-        btn.grid(
+        self.button.grid(
             row=row,
-            column=col,
+            column=column,
+            columnspan=colspan,
             sticky="ew",
             padx=5,
             pady=5,
