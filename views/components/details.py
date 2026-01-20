@@ -1,4 +1,4 @@
-from tkinter import ttk
+from tkinter import messagebox, ttk
 import tkinter as tk
 from typing import Any, Dict
 
@@ -8,41 +8,39 @@ class DetailRow(ttk.Frame):
     A single row representing one data field (Label + Read-only Entry).
     """
 
-    def __init__(self, parent: ttk.Widget, label: str, field_name: str):
+    def __init__(self, parent: ttk.Widget, field_name: str):
         super().__init__(parent)
 
         self.columnconfigure(1, weight=1)
 
-        self.value_var = tk.StringVar(value=label)
+        self.value_var = tk.StringVar()
         self.entry = ttk.Entry(
             self,
             width=40,
-            state="readonly",
+            state="normal",
             name=field_name,
             textvariable=self.value_var,
         )
         self.entry.grid(row=0, column=1, sticky="ew", padx=5, pady=5)
 
-    def _get_value(self):
-        return self.entry.get()
+    def _get_value(self) -> str:
+        """Return the current text in the entry."""
+        return self.value_var.get()
 
-    def _set_value(self, name, value):
-        self.name = name
-        self.value = value
-        return self.entry.setvar(self.name, self.value)
+    def _set_value(self, value: Any):
+        """Update the entry text."""
+        return self.value_var.set(str(value))
 
 
-class BookDetailsForm(ttk.LabelFrame):
+class BookForm(ttk.LabelFrame):
     """
     A container displaying the full list of book details.
     """
 
-    def __init__(self, parent: ttk.Widget, title: str = "Book Details"):
-        super().__init__(parent, text=title)
+    def __init__(self, parent: ttk.Widget):
+        super().__init__(parent)
         self.columnconfigure(0, weight=1)
 
-        # Configuration: Label Text mapped to Internal Name
-        # Using a list of tuples guarantees order
         self.field_config = [
             ("ISBN:", "isbn"),
             ("Title:", "title"),
@@ -57,29 +55,45 @@ class BookDetailsForm(ttk.LabelFrame):
 
         self.rows: Dict[str, DetailRow] = {}
 
-        # Dynamically generate rows based on config
         for idx, (label_text, field_name) in enumerate(self.field_config):
-            row = DetailRow(self, label_text, field_name)
+            row = DetailRow(self, field_name)
             row.grid(row=idx, column=0, sticky="ew", pady=2, padx=5)
 
-            # Store reference to access it later by name
             self.rows[field_name] = row
 
-    def load_data(self, data: Dict[str, Any]):
+    def set_data(self, data: Dict[str, Any]):
         """
         Populate the form with a dictionary of data.
         Keys in 'data' must match the internal names (isbn, title, etc).
         """
         for key, value in data.items():
             if key in self.rows:
-                self.rows[key]._set_value(value=value, name=key)
+                self.rows[key]._set_value(value)
+                return messagebox.showinfo("Successful", "Book Added Successfully!")
             else:
                 print(f"Warning: Data key '{key}' has no corresponding field.")
+                return messagebox.showerror(
+                    "Error",
+                    message="Warning: Data key '{key}' has no corresponding field.",
+                )
+
+    def get_data(self) -> Dict[str, str]:
+        """
+        Retrieve all data from the form as a dictionary.
+        Returns: {'isbn': '...', 'title': '...', ...}
+        """
+
+        data = {}
+        for field_name, row in self.rows.items():
+            data[field_name] = row._get_value()
+            print(data)
+        return data
 
     def clear_form(self):
         """Clear all fields."""
+
         for row in self.rows.values():
-            row._set_value(value="", name=row.keys)
+            row._set_value("")
 
 
 # def details_component(

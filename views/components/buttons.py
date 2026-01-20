@@ -1,59 +1,65 @@
 from tkinter import ttk
-from controllers._book_controller import BookActionController
-from views.widgets import custom_container_without_label
-from views.widgets import AppButton
+from typing import Callable, Optional
 
 
-def button_toolbar(parent: ttk.Widget) -> ttk.Frame:
+class ButtonToolBar(ttk.Frame):
     """
-    Create a horizontal toolbar of buttons inside a frame.
-
-    Each button is created from a dictionary mapping button labels to their respective functions.
-
-    Args:
-        parent (ttk.Widget): The parent widget where the toolbar will be placed.
-        button_data (dict): A dictionary mapping button text (str) to functions (callable).
-                            Example: {"Add": self.add, "Delete": self.delete}
-
-    Returns:
-        ttk.Frame: A frame containing the buttons arranged horizontally.
-
-    Example:
-        >>> buttons = {"Add": add_book, "Delete": delete_book, "Update": update_book}
-        >>> toolbar = button_toolbar(root, buttons)
-        >>> toolbar.grid(row=0, column=0, sticky="ew")
+    A reusable toolbar containing CRUD action buttons.
     """
 
-    frame = custom_container_without_label(parent)
-    frame.columnconfigure(
-        1,
-        weight=1,
-    )
+    def __init__(
+        self,
+        parent: ttk.Widget,
+        on_add: Optional[Callable] = None,
+        on_delete: Optional[Callable] = None,
+        on_update: Optional[Callable] = None,
+        on_clear: Optional[Callable] = None,
+    ):
+        """
+        Args:
+            parent: The parent widget.
+            on_add: Function to call when "Add Book" is clicked.
+            on_delete: Function to call when "Delete Book" is clicked.
+            on_update: Function to call when "Update Book" is clicked.
+            on_clear: Function to call when "Clear All" is clicked.
+        """
+        super().__init__(parent)
 
-    AppButton(
-        frame,
-        text="ADD",
-        row=1,
-        column=1,
-    )
-    AppButton(
-        frame,
-        text="CLEAR",
-        row=1,
-        column=1,
-    )
+        for col in range(4):
+            self.columnconfigure(col, weight=1)
 
-    return frame
+        # self.style = ttk.Style()
 
+        # self.style.theme_create("add_button", parent="self.button1")
 
-# --- Usage Example ---
-# Assuming you have your controller class from before
-# controller = Button_Click_Module()
+        self.button1 = ttk.Button(
+            self,
+            text="Add Book",
+            padding=(16, 4),
+            command=on_add if on_add else lambda: None,
+        )
+        self.button1.grid(row=0, column=0, padx=4, pady=4)
 
-# buttons_map = {
-#    "Add": controller.click_add_button,
-#    "Update": controller.click_update_button,
-#    "Delete": controller.click_delete_button
-# }
-# toolbar = button_toolbar_connected(root, buttons_map)
-# toolbar.pack(fill="x")
+        self.button2 = ttk.Button(
+            self,
+            text="Delete Book",
+            padding=(16, 4),
+            command=on_delete if on_delete else lambda: None,
+        )
+        self.button2.grid(row=0, column=1, padx=4, pady=4)
+
+        self.button3 = ttk.Button(
+            self,
+            text="Update Book",
+            padding=(16, 4),
+            command=on_update if on_update else lambda: None,
+        )
+        self.button3.grid(row=0, column=2, padx=4, pady=4)
+
+        self.button4 = ttk.Button(
+            self,
+            text="Clear All",
+            padding=(16, 4),
+            command=on_clear if on_clear else lambda: None,
+        )
+        self.button4.grid(row=0, column=3, padx=4, pady=4)

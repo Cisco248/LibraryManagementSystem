@@ -1,7 +1,5 @@
 from .settings import (
     APP_TITLE,
-    APP_WIDTH,
-    APP_HEIGHT,
     BOOKS_CSV,
     MEMBERS_CSV,
     AUTHORS_CSV,
@@ -10,18 +8,7 @@ from .settings import (
     MEMBER_FIELDS,
     AUTHOR_FIELDS,
     PUBLISHER_FIELDS,
+    APP_FOOTER_TEXT_1,
+    APP_RESIZABLE,
+    APP_FOOTER_TEXT_2,
 )
-
-__all__ = [
-    "APP_TITLE",
-    "APP_WIDTH",
-    "APP_HEIGHT",
-    "BOOKS_CSV",
-    "MEMBERS_CSV",
-    "AUTHORS_CSV",
-    "PUBLISHERS_CSV",
-    "BOOK_FIELDS",
-    "MEMBER_FIELDS",
-    "AUTHOR_FIELDS",
-    "PUBLISHER_FIELDS",
-]

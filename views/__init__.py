@@ -1,6 +1,6 @@
-from .books import create_book_interface
-from .members import member_management_gui
-from .authors import author_management_gui
-from .publishers import publisher_management_gui
-from .components import buttons, details, search
+from .books import BookView
+from .members import MemberView
+from .authors import AuthorView
+from .publishers import PublisherView
+from .components import buttons, details, search, list_view
 from .widgets import container, details_frame

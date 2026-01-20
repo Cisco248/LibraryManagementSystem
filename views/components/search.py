@@ -38,7 +38,7 @@ class SearchComponent(ttk.Labelframe):
         self.lbl = ttk.Label(self, text=lable_text)
         self.lbl.grid(row=0, column=0, padx=4, pady=4)
 
-        self.search_var = tk.StringVar(value="Enter the ISBN")
+        self.search_var = tk.StringVar(value="Enter the Value")
         self.entry = ttk.Entry(self, textvariable=self.search_var, width=30)
         self.entry.grid(row=0, column=1, padx=8, pady=4, sticky="ew")
 

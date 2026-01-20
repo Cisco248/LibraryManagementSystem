@@ -6,12 +6,17 @@ from repository import (
     PublisherRepository,
 )
 from views import (
-    author_management_gui,
-    member_management_gui,
-    publisher_management_gui,
-    create_book_interface,
+    BookView,
+    create_books_tab,
+    MemberView,
+    create_member_tab,
+    PublisherView,
+    create_publisher_tab,
+    AuthorView,
+    create_author_tab,
     components,
     widgets,
 )
 from models import BookModel, MemberModel, AuthorModel, PublisherModel
 from services import BookService
+from utils import ExternalWindow

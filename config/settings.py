@@ -22,9 +22,12 @@ os.makedirs(DATABASE_DIR, exist_ok=True)
 
 # Application settings
 APP_TITLE = "Library Management System"
-APP_WIDTH = 600
-APP_HEIGHT = 600
 APP_RESIZABLE = False
+
+APP_HEADER_TITLE = "LibraSys"
+
+APP_FOOTER_TEXT_1 = "© 2026 Library Management System | Developed by Lahiru Dilshan"
+APP_FOOTER_TEXT_2 = "Powered by Python & Tkinter | Version 2.0"
 
 # UI Settings
 THEME = "clam"
