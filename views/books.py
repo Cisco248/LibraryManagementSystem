@@ -1,5 +1,11 @@
 from tkinter import ttk
-from .components import SearchComponent, ButtonToolBar, BookListView
+from .components import (
+    SearchComponent,
+    ButtonToolBar,
+    BookListView,
+    BarrowBookListView,
+    MiniButtonBar,
+)
 from .components import BookExternalModels
 
 
@@ -54,3 +60,7 @@ class BookView(ttk.Frame):
         )
 
         BookListView(container)
+
+        MiniButtonBar(container, "Reservation", "Return Back")
+
+        BarrowBookListView(container)

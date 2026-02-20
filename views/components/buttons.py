@@ -53,3 +53,36 @@ class ButtonToolBar(ttk.Frame):
             command=on_clear if on_clear else lambda: None,
         )
         self.button4.grid(row=0, column=3, padx=4, pady=4)
+
+
+class MiniButtonBar(ttk.Frame):
+
+    def __init__(
+        self,
+        parent,
+        button_1_name,
+        button_2_name,
+        barrow: Optional[Callable] = None,
+        return_back: Optional[Callable] = None,
+    ):
+        super().__init__(parent)
+        self.pack(fill="x", padx=12, pady=6)
+
+        for col in range(2):
+            self.columnconfigure(col, weight=1)
+
+        self.button1 = ttk.Button(
+            self,
+            text=button_1_name,
+            padding=(16, 4),
+            command=barrow if barrow else lambda: None,
+        )
+        self.button1.grid(row=0, column=0, padx=4, pady=4)
+
+        self.button2 = ttk.Button(
+            self,
+            text=button_2_name,
+            padding=(16, 4),
+            command=return_back if return_back else lambda: None,
+        )
+        self.button2.grid(row=0, column=1, padx=4, pady=4)

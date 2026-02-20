@@ -21,15 +21,17 @@ class SearchComponent(ttk.Labelframe):
     ):
         super().__init__(parent, text=title)
         self.command = command
-        self.pack(fill="x", padx=12, pady=12)
+        self.pack(fill="both", padx=12, pady=12)
 
-        self.columnconfigure(2, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(3, weight=1)
 
         self.lbl = ttk.Label(self, text=lable_text)
         self.lbl.grid(row=0, column=0, padx=4, pady=4)
 
         self.search_var = tk.StringVar(value="Enter the Value")
-        self.entry = ttk.Entry(self, textvariable=self.search_var, width=30)
+        self.entry = ttk.Entry(self, textvariable=self.search_var, width=60)
         self.entry.grid(row=0, column=1, padx=8, pady=4, sticky="ew")
 
         self.entry.bind("<Return>", lambda event: self._on_search())

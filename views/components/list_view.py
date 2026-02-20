@@ -44,8 +44,6 @@ class BookListView(ttk.Frame):
 
         self.list_view.pack(fill="both", expand=True)
 
-        self.list_view.pack(fill="both", expand=True)
-
         self.add_sample_data()
 
     def add_sample_data(self):
@@ -110,6 +108,35 @@ class BookListView(ttk.Frame):
 
         for book in sample_books:
             self.list_view.insert("", "end", values=book)
+
+
+class BarrowBookListView(ttk.Frame):
+    def __init__(self, master: ttk.Widget):
+        super().__init__(master)
+
+        self.pack(fill="both", expand=True, padx=12, pady=6)
+
+        self.list_view = ttk.Treeview(
+            self,
+            columns=[
+                "isbn",
+                "title",
+                "member",
+                "status",
+            ],
+            show="headings",
+        )
+        self.list_view.heading("isbn", text="ISBN")
+        self.list_view.heading("title", text="Title")
+        self.list_view.heading("member", text="Member")
+        self.list_view.heading("status", text="Status")
+
+        self.list_view.column("isbn", width=120, anchor="center")
+        self.list_view.column("title", width=200, anchor="center")
+        self.list_view.column("member", width=200, anchor="center")
+        self.list_view.column("status", width=100, anchor="center")
+
+        self.list_view.pack(fill="both", expand=True)
 
 
 class MemberListView(ttk.Frame):
