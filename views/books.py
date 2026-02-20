@@ -1,7 +1,6 @@
 from tkinter import ttk
-import tkinter as tk
-from .components import BookForm, SearchComponent, ButtonToolBar, BookListView
-from utils import ExternalWindow
+from .components import SearchComponent, ButtonToolBar, BookListView
+from .components import BookExternalModels
 
 
 class BookView(ttk.Frame):
@@ -25,33 +24,33 @@ class BookView(ttk.Frame):
             else:
                 print(f"Searching: {query}")
 
-        def open_add_book_modal():
-            def on_submit(form_data):
-                print("Book Added:", form_data)
-
-            ExternalWindow(
-                parent=container,
-                title="Add New Book",
-                content_class=BookForm,
-                command=on_submit,
-            )
-
-        search_widget = SearchComponent(
+        SearchComponent(
             container,
             title="Search Books",
             button_text="Search",
             lable_text="Title / ISBN",
             command=on_search,
         )
-        search_widget.pack(fill="x", padx=12, pady=12)
 
-        button_tool = ButtonToolBar(
+        def open_add_book_modal():
+            bem = BookExternalModels(container)
+            bem.book_add_model()
+
+        def open_delete_book_model():
+            pass
+
+        def open_update_book_model():
+            pass
+
+        def open_clear_book_model():
+            pass
+
+        ButtonToolBar(
             container,
             on_add=open_add_book_modal,
-            on_delete=lambda: print("Delete"),
-            on_update=lambda: print("Update"),
-            on_clear=lambda: print("Clear"),
+            on_delete=open_delete_book_model,
+            on_update=open_update_book_model,
+            on_clear=open_clear_book_model,
         )
-        button_tool.pack(fill="x", padx=12, pady=6)
 
         BookListView(container)

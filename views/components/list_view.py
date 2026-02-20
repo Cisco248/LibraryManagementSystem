@@ -5,11 +5,10 @@ class BookListView(ttk.Frame):
     def __init__(self, master: ttk.Widget):
         super().__init__(master)
 
-        # Pack the frame itself
         self.pack(fill="both", expand=True, padx=12, pady=6)
 
         self.list_view = ttk.Treeview(
-            self,  # Use self as parent, not master
+            self,
             columns=[
                 "isbn",
                 "title",
@@ -23,7 +22,6 @@ class BookListView(ttk.Frame):
             ],
             show="headings",
         )
-        # Define column headings
         self.list_view.heading("isbn", text="ISBN")
         self.list_view.heading("title", text="Title")
         self.list_view.heading("author", text="Author")
@@ -34,7 +32,6 @@ class BookListView(ttk.Frame):
         self.list_view.heading("file_format", text="Format")
         self.list_view.heading("file_size", text="Size")
 
-        # Define column widths
         self.list_view.column("isbn", width=120, anchor="center")
         self.list_view.column("title", width=200, anchor="center")
         self.list_view.column("author", width=150, anchor="center")

@@ -15,22 +15,12 @@ class ButtonToolBar(ttk.Frame):
         on_update: Optional[Callable] = None,
         on_clear: Optional[Callable] = None,
     ):
-        """
-        Args:
-            parent: The parent widget.
-            on_add: Function to call when "Add Book" is clicked.
-            on_delete: Function to call when "Delete Book" is clicked.
-            on_update: Function to call when "Update Book" is clicked.
-            on_clear: Function to call when "Clear All" is clicked.
-        """
+
         super().__init__(parent)
+        self.pack(fill="x", padx=12, pady=6)
 
         for col in range(4):
             self.columnconfigure(col, weight=1)
-
-        # self.style = ttk.Style()
-
-        # self.style.theme_create("add_button", parent="self.button1")
 
         self.button1 = ttk.Button(
             self,

@@ -1,5 +1,5 @@
 from tkinter import ttk
-from utils.external_window import ExternalWindow
+from views.components.external_window import ExternalWindow
 from views.components import SearchComponent, ButtonToolBar, BookForm, MemberListView
 
 
@@ -17,12 +17,6 @@ class MemberView(ttk.Frame):
         self._setup_tab(self.frame)
 
     def _setup_tab(self, parent_container: ttk.Frame):
-        """
-        Reusable method to build the UI for a specific tab.
-        Args:
-            parent_container: The specific tab frame (member) to build inside.
-        """
-
         def on_search(isbn):
             print(f"Searching for ISBN: {isbn}")
             if len(isbn) < 5:
@@ -31,7 +25,6 @@ class MemberView(ttk.Frame):
                 print("Success: Book found")
 
         def open_add_book_modal():
-            """Handle 'Add Book' button click."""
 
             def on_popup_submit(form_instance):
                 print(f"Add Component")

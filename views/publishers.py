@@ -1,5 +1,5 @@
 from tkinter import ttk
-from utils.external_window import ExternalWindow
+from views.components.external_window import ExternalWindow
 from views.components import SearchComponent, BookForm, ButtonToolBar, PublisherListView
 
 
@@ -17,14 +17,8 @@ class PublisherView(ttk.Frame):
         self._setup_tab(self.frame)
 
     def _setup_tab(self, parent: ttk.Frame):
-        """
-        Reusable method to build the UI for a specific tab.
-        Args:
-            parent: The specific tab frame (member) to build inside.
-        """
 
         def _on_search(isbn):
-            """Handle search button click."""
             print(f"Searching for ISBN: {isbn}")
             if len(isbn) < 5:
                 print("Error: Invalid ISBN")
@@ -32,7 +26,6 @@ class PublisherView(ttk.Frame):
                 print("Success: Book found")
 
         def _open_add_book_modal():
-            """Handle 'Add Book' button click."""
 
             def on_popup_submit(form_instance):
                 print(f"Add Component")

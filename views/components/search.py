@@ -19,21 +19,11 @@ class SearchComponent(ttk.Labelframe):
         lable_text: str,
         command: Callable[[str], None],
     ):
-        """
-        Initialize the SearchComponent.
-
-        Args:
-            parent: The parent widget.
-            title: Title for the LabelFrame.
-            button_text: Text for the action button.
-            label_text: Text for the label next to the input.
-            command: A function to call when the button is clicked.
-                     It receives the current entry text as an argument.
-        """
         super().__init__(parent, text=title)
         self.command = command
+        self.pack(fill="x", padx=12, pady=12)
 
-        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
 
         self.lbl = ttk.Label(self, text=lable_text)
         self.lbl.grid(row=0, column=0, padx=4, pady=4)
@@ -51,7 +41,6 @@ class SearchComponent(ttk.Labelframe):
         self.res_lbl.grid(row=1, column=0, columnspan=3, padx=4, pady=4, sticky="ew")
 
     def _on_search(self):
-        """Internal method to handle button clicks."""
         query = self.search_var.get()
         if self.command:
             self.command(query)
@@ -59,6 +48,5 @@ class SearchComponent(ttk.Labelframe):
             print(f"Search triggered for: {query} (No command bound)")
 
     def set_feedback(self, message: str, is_error: bool = False):
-        """Helper to update the result label from outside."""
         color = "red" if is_error else "green"
         self.res_lbl.config(text=message, foreground=color)
