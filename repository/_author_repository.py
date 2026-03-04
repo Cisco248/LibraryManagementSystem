@@ -40,7 +40,7 @@ class AuthorRepository:
         except Exception as e:
             raise Exception(f"Error adding author: {str(e)}")
 
-    def get_author(self, author_id: str) -> dict:
+    def get_author(self, author_id: str):
         """Retrieve an author by ID."""
         try:
             with open(self.csv_file, "r", newline="") as file:
@@ -61,7 +61,7 @@ class AuthorRepository:
         except Exception as e:
             raise Exception(f"Error retrieving all authors: {str(e)}")
 
-    def update_author(self, author_id: str, updates: dict) -> dict:
+    def update_author(self, author_id: str, updates: dict):
         """Update an author's information."""
         authors = self.get_all_authors()
         author_found = False

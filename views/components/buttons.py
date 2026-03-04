@@ -86,3 +86,25 @@ class MiniButtonBar(ttk.Frame):
             command=return_back if return_back else lambda: None,
         )
         self.button2.grid(row=0, column=1, padx=4, pady=4)
+
+
+class ScanButton(ttk.Frame):
+
+    def __init__(
+        self,
+        parent,
+        button_name,
+        func_name: Optional[Callable],
+    ):
+        super().__init__(parent)
+        self.pack(fill="x", padx=12, pady=6)
+
+        self.columnconfigure(1, weight=1)
+
+        self.button1 = ttk.Button(
+            self,
+            text=button_name,
+            padding=(16, 4),
+            command=func_name if func_name else lambda: None,
+        )
+        self.button1.grid(row=0, column=0, padx=4, pady=4)
