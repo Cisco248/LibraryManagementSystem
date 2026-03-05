@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+
+from utils import BarCodeScanner
+from views.components.buttons import ScanButton
+from views.components.details import BookForm
 from ..widgets import DetailRow
 
 
@@ -30,18 +34,37 @@ class BookExternalModels(ExternalWindow):
         book_form = tk.Frame(self)
         book_form.pack(fill="both", padx=12, pady=12)
 
-        DetailRow(book_form, field_name="isbn", label_text="ISBN")
-
-        def on_submit():
-            print("hello")
-
-        submit_btn = ttk.Button(
-            book_form,
-            text="Submit",
-            padding=(8, 4),
-            command=on_submit,
+        DetailRow(book_form, field_name="isbn", label_text="ISBN").pack(
+            fill="both", padx=12, pady=12
         )
-        
-        submit_btn.pack(pady=(0, 10), padx=4)
 
-        return book_form
+        def handle_submit(data):
+            print("Form Data:", data)
+
+        form = BookForm(self, command=handle_submit)
+        form.pack(fill="both", expand=True, padx=12, pady=12)
+
+        # submit_btn = ttk.Button(
+        #     book_form,
+        #     text="Submit",
+        #     padding=(8, 4),
+        #     command=handle_submit,
+        # )
+
+        # submit_btn.pack(pady=(0, 10), padx=4)
+
+        scanner = BarCodeScanner(
+            out_path="books.csv",
+            column_titles=[
+                "ISBN",
+                "Title",
+                "Author",
+                "Publisher",
+                "Published",
+                "Scanned At",
+            ],
+        )
+
+        ScanButton(
+            book_form, button_name="Scan Now!", func_name=scanner.start_scanner()
+        ).pack(fill="both")

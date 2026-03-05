@@ -39,8 +39,7 @@ class BookView(ttk.Frame):
         )
 
         def open_add_book_modal():
-            bem = BookExternalModels(container)
-            bem.book_add_model()
+            BookExternalModels(container)
 
         def open_delete_book_model():
             pass
