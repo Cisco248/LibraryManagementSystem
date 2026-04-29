@@ -1,0 +1,51 @@
+isbn,title,author,publisher,publication_year,book_type,status,file_format,file_size
+111111,Guitar Lesson 1,Mark,Unknown Publisher,2020,printed,Available,N/A,N/A
+222222,Python Basics,John Doe,Unknown Publisher,2020,ebook,Available,PDF,9MB
+333333,Cooking 101,Jane Smith,Unknown Publisher,2020,printed,Unavailable,N/A,N/A
+444444,Astronomy Guide,Dr. Star,Unknown Publisher,2020,printed,Available,N/A,N/A
+555555,History of Art,Leonardo,Unknown Publisher,2020,printed,Available,N/A,N/A
+666666,Java Essentials,Alice Brown,Unknown Publisher,2020,ebook,Available,PDF,5MB
+777777,French for Beginners,Pierre Dupont,Unknown Publisher,2020,printed,Unavailable,N/A,N/A
+888888,Yoga for All,Maya Patel,Unknown Publisher,2020,printed,Available,N/A,N/A
+999999,World Geography,Tom Wilson,Unknown Publisher,2020,printed,Available,N/A,N/A
+101010,Painting Techniques,Anna Lee,Unknown Publisher,2020,printed,Available,N/A,N/A
+111112,Data Science Intro,Michael Chen,Unknown Publisher,2020,ebook,Available,PDF,5MB
+121212,Guitar Lesson 2,Mark,Unknown Publisher,2020,printed,Available,N/A,N/A
+131313,Baking Secrets,Rachel Green,Unknown Publisher,2020,printed,Available,N/A,N/A
+141414,Astronomy Deep Dive,Dr. Star,Unknown Publisher,2020,printed,Unavailable,N/A,N/A
+151515,History of Europe,William Clark,Unknown Publisher,2020,printed,Available,N/A,N/A
+161616,Spanish Basics,Lucia Gomez,Unknown Publisher,2020,printed,Available,N/A,N/A
+171717,Meditation Guide,Sita Sharma,Unknown Publisher,2020,printed,Available,N/A,N/A
+181818,Algebra Made Easy,Henry White,Unknown Publisher,2020,printed,Available,N/A,N/A
+191919,Sketching Tips,Leo Martinez,Unknown Publisher,2020,printed,Available,N/A,N/A
+202020,Python Advanced,John Doe,Unknown Publisher,2020,ebook,Unavailable,PDF,7MB
+212121,Piano Lessons 1,Clara Adams,Unknown Publisher,2020,printed,Available,N/A,N/A
+222223,Vegan Cooking,Jane Smith,Unknown Publisher,2020,printed,Available,N/A,N/A
+232323,Physics 101,Isaac Newton,Unknown Publisher,2020,printed,Available,N/A,N/A
+242424,Ancient Civilizations,Howard Carter,Unknown Publisher,2020,printed,Available,N/A,N/A
+252525,Italian Basics,Marco Rossi,Unknown Publisher,2020,printed,Available,N/A,N/A
+262626,Fitness at Home,Tom Brown,Unknown Publisher,2020,printed,Unavailable,N/A,N/A
+272727,Geometry Essentials,Sarah Miller,Unknown Publisher,2020,printed,Available,N/A,N/A
+282828,Watercolor Techniques,Anna Lee,Unknown Publisher,2020,printed,Available,N/A,N/A
+292929,JavaScript Basics,Alice Brown,Unknown Publisher,2020,ebook,Available,EPUB,10MB
+303030,Guitar Lesson 3,Mark,Unknown Publisher,2020,printed,Available,N/A,N/A
+313131,Desserts Masterclass,Rachel Green,Unknown Publisher,2020,printed,Unavailable,N/A,N/A
+323232,Chemistry for Teens,Marie Curie,Unknown Publisher,2020,printed,Available,N/A,N/A
+333334,History of Asia,Sun Tzu,Unknown Publisher,2020,printed,Available,N/A,N/A
+343434,German for Beginners,Hans Schmidt,Unknown Publisher,2020,printed,Available,N/A,N/A
+353535,Healthy Eating,Maya Patel,Unknown Publisher,2020,printed,Available,N/A,N/A
+363636,Calculus Basics,Henry White,Unknown Publisher,2020,printed,Available,N/A,N/A
+373737,Oil Painting Guide,Leo Martinez,Unknown Publisher,2020,printed,Available,N/A,N/A
+383838,C++ Programming,Alice Brown,Unknown Publisher,2020,ebook,Available,PDF,7MB
+393939,Piano Lessons 2,Clara Adams,Unknown Publisher,2020,printed,Available,N/A,N/A
+404040,Quick Meals,Jane Smith,Unknown Publisher,2020,printed,Available,N/A,N/A
+414141,Astronomy Experiments,Dr. Star,Unknown Publisher,2020,printed,Available,N/A,N/A
+424242,Modern History,William Clark,Unknown Publisher,2020,printed,Unavailable,N/A,N/A
+434343,French Advanced,Pierre Dupont,Unknown Publisher,2020,printed,Available,N/A,N/A
+444445,Mindfulness,Sita Sharma,Unknown Publisher,2020,printed,Available,N/A,N/A
+454545,Trigonometry Simplified,Sarah Miller,Unknown Publisher,2020,printed,Available,N/A,N/A
+464646,Portrait Drawing,Anna Lee,Unknown Publisher,2020,printed,Available,N/A,N/A
+474747,Python Projects,John Doe,Unknown Publisher,2020,ebook,Available,EPUB,10MB
+484848,Guitar Lesson 4,Mark,Unknown Publisher,2020,printed,Available,N/A,N/A
+494949,Baking Cakes,Rachel Green,Unknown Publisher,2020,printed,Available,N/A,N/A
+505050,Science Experiments,Isaac Newton,Unknown Publisher,2020,printed,Available,N/A,N/A
