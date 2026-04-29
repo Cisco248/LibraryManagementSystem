@@ -1,4 +1,8 @@
 from tkinter import ttk
+from services.book_service import BookActionController
+from services.author_service import AuthorActionController
+from services.member_service import MemberActionController
+from services.publisher_service import PublisherActionController
 
 
 class BookListView(ttk.Frame):
@@ -47,67 +51,27 @@ class BookListView(ttk.Frame):
         self.add_sample_data()
 
     def add_sample_data(self):
-        """Add some sample books to demonstrate"""
-        sample_books = [
-            (
-                "978-0-123456-78-9",
-                "Python Programming",
-                "John Doe",
-                "Tech Books",
-                "2023",
-                "eBook",
-                "Available",
-                "PDF",
-                "5.2 MB",
-            ),
-            (
-                "978-0-987654-32-1",
-                "Data Science Basics",
-                "Jane Smith",
-                "Data Press",
-                "2022",
-                "Hardcover",
-                "Borrowed",
-                "N/A",
-                "N/A",
-            ),
-            (
-                "978-1-111111-11-1",
-                "Web Development",
-                "Bob Johnson",
-                "Web Publishers",
-                "2024",
-                "eBook",
-                "Available",
-                "EPUB",
-                "3.8 MB",
-            ),
-            (
-                "978-2-222222-22-2",
-                "Machine Learning",
-                "Alice Brown",
-                "AI Books",
-                "2023",
-                "Paperback",
-                "Available",
-                "N/A",
-                "N/A",
-            ),
-            (
-                "978-3-333333-33-3",
-                "Database Design",
-                "Charlie Wilson",
-                "Tech Press",
-                "2021",
-                "eBook",
-                "Reserved",
-                "PDF",
-                "7.1 MB",
-            ),
-        ]
+        """Fetch real data from database via controller"""
+        controller = BookActionController()
+        books = controller.handle_get_all()
 
-        for book in sample_books:
-            self.list_view.insert("", "end", values=book)
+        if not isinstance(books, list):
+            print("Error retrieving books:", books)
+            return
+
+        for book in books:
+            book_row = (
+                book.isbn,
+                book.title,
+                book.author,
+                book.publisher,
+                book.publication_year,
+                book.book_type,
+                book.status,
+                book.file_format,
+                book.file_size,
+            )
+            self.list_view.insert("", "end", values=book_row)
 
 
 class BarrowBookListView(ttk.Frame):
@@ -203,17 +167,24 @@ class MemberListView(ttk.Frame):
         self.add_sample_data()
 
     def add_sample_data(self):
-        """Add some sample members to demonstrate"""
-        sample_members = [
-            ("M001", "John Doe", "+94 77 123 4567", "28", "Premium", "Active"),
-            ("M002", "Jane Smith", "+94 71 234 5678", "35", "Standard", "Active"),
-            ("M003", "Bob Johnson", "+94 76 345 6789", "42", "Premium", "Active"),
-            ("M004", "Alice Brown", "+94 70 456 7890", "25", "Standard", "Inactive"),
-            ("M005", "Charlie Wilson", "+94 75 567 8901", "31", "Premium", "Active"),
-        ]
+        """Fetch real data from database via controller"""
+        controller = MemberActionController()
+        members = controller.handle_get_all()
 
-        for member in sample_members:
-            self.list_view.insert("", "end", values=member)
+        if not isinstance(members, list):
+            print("Error retrieving members:", members)
+            return
+
+        for member in members:
+            member_row = (
+                member.member_id,
+                member.member_name,
+                member.contact_no,
+                member.age,
+                member.membership_type,
+                member.membership_status,
+            )
+            self.list_view.insert("", "end", values=member_row)
 
 
 class AuthorListView(ttk.Frame):
@@ -283,57 +254,26 @@ class AuthorListView(ttk.Frame):
         self.add_sample_data()
 
     def add_sample_data(self):
-        """Add some sample author to demonstrate"""
-        sample_members = [
-            (
-                "M001",
-                "John Doe",
-                "+94 77 123 4567",
-                "28",
-                "Local",
-                "Active",
-                "2022-01-15",
-            ),
-            (
-                "M002",
-                "Jane Smith",
-                "+94 71 234 5678",
-                "35",
-                "International",
-                "Active",
-                "2022-01-15",
-            ),
-            (
-                "M003",
-                "Bob Johnson",
-                "+94 76 345 6789",
-                "42",
-                "Local",
-                "Active",
-                "2022-01-15",
-            ),
-            (
-                "M004",
-                "Alice Brown",
-                "+94 70 456 7890",
-                "25",
-                "International",
-                "Inactive",
-                "2022-01-15",
-            ),
-            (
-                "M005",
-                "Charlie Wilson",
-                "+94 75 567 8901",
-                "31",
-                "Local",
-                "Active",
-                "2022-01-15",
-            ),
-        ]
+        """Fetch real data from database via controller"""
+        controller = AuthorActionController()
+        authors = controller.handle_get_all()
 
-        for member in sample_members:
-            self.list_view.insert("", "end", values=member)
+        if not isinstance(authors, list):
+            print("Error retrieving authors:", authors)
+            return
+
+        for author in authors:
+            author_row = (
+                author.author_id,
+                author.author_name,
+                author.address,
+                author.gov_reg_no,
+                author.agreement_time,
+                "Regular",
+                "Active",
+                "N/A",
+            )
+            self.list_view.insert("", "end", values=author_row)
 
 
 class PublisherListView(ttk.Frame):
@@ -375,9 +315,7 @@ class PublisherListView(ttk.Frame):
                 "publisher_name",
                 "address",
                 "gov_reg_no",
-                "publisher_type",
-                "publisher_status",
-                "reg_date",
+                "agreement_time",
             ],
             show="headings",
         )
@@ -386,71 +324,31 @@ class PublisherListView(ttk.Frame):
         self.list_view.heading("publisher_name", text="Name")
         self.list_view.heading("address", text="Address")
         self.list_view.heading("gov_reg_no", text="Gov Reg No")
-        self.list_view.heading("publisher_type", text="Membership Type")
-        self.list_view.heading("publisher_status", text="Status")
-        self.list_view.heading("reg_date", text="Reg Date")
+        self.list_view.heading("agreement_time", text="Agreement Time")
 
         self.list_view.column("publisher_id", width=120, anchor="center")
         self.list_view.column("publisher_name", width=200, anchor="center")
         self.list_view.column("address", width=250, anchor="center")
         self.list_view.column("gov_reg_no", width=80, anchor="center")
-        self.list_view.column("publisher_type", width=150, anchor="center")
-        self.list_view.column("publisher_status", width=120, anchor="center")
-        self.list_view.column("reg_date", width=120, anchor="center")
+        self.list_view.column("agreement_time", width=150, anchor="center")
 
         self.list_view.pack(fill="both", expand=True)
 
         self.add_sample_data()
 
     def add_sample_data(self):
-        """Add some sample Publisher to demonstrate"""
-        sample_members = [
-            (
-                "M001",
-                "John Doe",
-                "+94 77 123 4567",
-                "28",
-                "Local",
-                "Active",
-                "2022-01-15",
-            ),
-            (
-                "M002",
-                "Jane Smith",
-                "+94 71 234 5678",
-                "35",
-                "International",
-                "Active",
-                "2022-01-15",
-            ),
-            (
-                "M003",
-                "Bob Johnson",
-                "+94 76 345 6789",
-                "42",
-                "Local",
-                "Active",
-                "2022-01-15",
-            ),
-            (
-                "M004",
-                "Alice Brown",
-                "+94 70 456 7890",
-                "25",
-                "International",
-                "Inactive",
-                "2022-01-15",
-            ),
-            (
-                "M005",
-                "Charlie Wilson",
-                "+94 75 567 8901",
-                "31",
-                "Local",
-                "Active",
-                "2022-01-15",
-            ),
-        ]
+        controller = PublisherActionController()
+        publishers = controller.handle_get_all()
 
-        for member in sample_members:
-            self.list_view.insert("", "end", values=member)
+        if not isinstance(publishers, list):
+            raise ValueError("Error retrieving publishers:", publishers)
+
+        for publisher in publishers:
+            publisher_row = (
+                publisher.publisher_id,
+                publisher.publisher_name,
+                publisher.address,
+                publisher.gov_reg_no,
+                publisher.agreement_time,
+            )
+            self.list_view.insert("", "end", values=publisher_row)

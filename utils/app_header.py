@@ -3,11 +3,6 @@ import tkinter as tk
 from tkinter import ttk
 
 
-import tkinter as tk
-from tkinter import ttk
-from PIL import Image, ImageTk
-
-
 class AppHeader(ttk.Frame):
     def __init__(self, master):
         super().__init__(master, style="Master.TFrame")

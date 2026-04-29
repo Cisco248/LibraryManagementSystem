@@ -6,39 +6,32 @@ Uses tkinter (ttk) for the user interface and implements MVC architecture.
 """
 
 from tkinter import Tk, ttk
-from config.settings import APP_TITLE
-from utils import AppHeader, AppFooter
-from views import (
-    BookView,
-    MemberView,
-    AuthorView,
-    PublisherView,
-)
+
+from config.configure import APP_TITLE
+from utils import app_header, app_footer
+from views import BookView, AuthorView, PublisherView, MemberView
 
 
-class LibraryManagementApp:
-    """Main application class for Library Management System."""
-
-    def __init__(self, root: Tk):
-        self.root = root
+class MainAppRunner:
+    def __init__(self):
+        self.root = Tk()
         self.root.title(APP_TITLE)
 
-        self.root.resizable(width=False, height=False)
+        self.root.resizable(False, False)
         self.root.update_idletasks()
-        self.root.wm_minsize(height=800, width=1000)
+        self.root.wm_minsize(800, 1000)
 
-        AppHeader(self.root)
+        app_header.AppHeader(self.root)
 
         Root = self.ContentFrame(self.root)
-
         self.NoteBook(Root)
-
+        
         BookView(self.notebook)
-        MemberView(self.notebook)
         AuthorView(self.notebook)
         PublisherView(self.notebook)
+        MemberView(self.notebook)
 
-        AppFooter(Root)
+        app_footer.AppFooter(self.root)
 
     def NoteBook(self, master: ttk.Frame):
         self.notebook = ttk.Notebook(master)
@@ -52,9 +45,8 @@ class LibraryManagementApp:
 
 
 def main():
-    root = Tk()
-    LibraryManagementApp(root)
-    root.mainloop()
+    app = MainAppRunner()
+    app.root.mainloop()
 
 
 if __name__ == "__main__":

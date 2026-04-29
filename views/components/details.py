@@ -7,10 +7,9 @@ from ..widgets import DetailRow
 
 class BookForm(tk.LabelFrame):
 
-    def __init__(self, parent, command=None, **kwargs):
+    def __init__(self, parent, **kwargs):
         super().__init__(parent, text="Book Details", padx=12, pady=12, **kwargs)
 
-        self.command = command
         self.columnconfigure(0, weight=1)
 
         self.build_form()
@@ -18,19 +17,28 @@ class BookForm(tk.LabelFrame):
     def build_form(self):
 
         self.isbn_row = DetailRow(self, field_name="isbn", label_text="ISBN")
+        self.isbn_row.pack(fill="x", pady=(10, 0))
+
         self.title_row = DetailRow(self, field_name="title", label_text="Title")
+        self.title_row.pack(fill="x", pady=(10, 0))
+
         self.author_row = DetailRow(self, field_name="author", label_text="Author")
+        self.author_row.pack(fill="x", pady=(10, 0))
+
         self.publisher_row = DetailRow(
             self, field_name="publisher", label_text="Publisher"
         )
+        self.publisher_row.pack(fill="x", pady=(10, 0))
+
         self.year_row = DetailRow(self, field_name="year", label_text="Published Year")
+        self.year_row.pack(fill="x", pady=(10, 0))
 
         submit_btn = ttk.Button(
             self, text="Submit", padding=(8, 4), command=self.on_submit
         )
         submit_btn.pack(pady=(10, 0))
 
-    def on_submit(self):
+    def on_submit(self) -> dict[str, str]:
         data = {
             "isbn": self.isbn_row.get_value(),
             "title": self.title_row.get_value(),
@@ -39,8 +47,7 @@ class BookForm(tk.LabelFrame):
             "year": self.year_row.get_value(),
         }
 
-        if self.command:
-            self.command(data)
+        return data
 
     # Optional helper method
     def set_form_data(self, book_data: dict):

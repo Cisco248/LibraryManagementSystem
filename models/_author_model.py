@@ -7,73 +7,42 @@ in the library management system.
 
 
 class AuthorModel:
-    """
-    Represents an author entity in the library system.
-
-    Attributes:
-        author_id (str): Unique identifier for the author.
-        name (str): Full name of the author.
-        biography (str): Biography or description of the author.
-        country (str): Country of origin.
-        birth_year (int): Year the author was born.
-
-    Examples:
-        >>> author = AuthorModel(
-        ...     author_id="A001",
-        ...     name="J.K. Rowling",
-        ...     biography="British author",
-        ...     country="United Kingdom",
-        ...     birth_year=1965
-        ... )
-    """
-
     def __init__(
         self,
         author_id: str,
-        name: str,
-        biography: str = "",
-        country: str = "",
-        birth_year: int = 0,
+        author_name: str,
+        address: str = "",
+        gov_reg_no: str = "",
+        agreement_time: int = 0,
     ):
-        """
-        Initialize an AuthorModel instance.
-
-        Args:
-            author_id (str): Unique identifier.
-            name (str): Author's full name.
-            biography (str, optional): Author's biography. Defaults to "".
-            country (str, optional): Author's country. Defaults to "".
-            birth_year (int, optional): Birth year. Defaults to None.
-
-        Raises:
-            ValueError: If required fields are empty or invalid.
-        """
         if not author_id or not isinstance(author_id, str):
             raise ValueError("Author ID must be a non-empty string.")
-        if not name or not isinstance(name, str):
-            raise ValueError("Name must be a non-empty string.")
+        if not author_name or not isinstance(author_name, str):
+            raise ValueError("author_name must be a non-empty string.")
 
         self.author_id = author_id
-        self.name = name
-        self.biography = biography
-        self.country = country
-        self.birth_year = birth_year
+        self.author_name = author_name
+        self.address = address
+        self.gov_reg_no = gov_reg_no
+        self.agreement_time = agreement_time
 
     def to_dict(self) -> dict:
-        """
-        Convert the AuthorModel instance to a dictionary.
-
-        Returns:
-            dict: Dictionary representation of the author.
-        """
         return {
             "author_id": self.author_id,
-            "name": self.name,
-            "biography": self.biography,
-            "country": self.country,
-            "birth_year": self.birth_year,
+            "author_name": self.author_name,
+            "address": self.address,
+            "gov_reg_no": self.gov_reg_no,
+            "agreement_time": self.agreement_time,
         }
 
+    def to_tuple(self):
+        return (
+            self.author_id,
+            self.author_name,
+            self.address,
+            self.gov_reg_no,
+            self.agreement_time,
+        )
+
     def __repr__(self) -> str:
-        """Return string representation of AuthorModel."""
-        return f"AuthorModel(author_id='{self.author_id}', name='{self.name}')"
+        return f"ID={self.author_id}, Name={self.author_name}"

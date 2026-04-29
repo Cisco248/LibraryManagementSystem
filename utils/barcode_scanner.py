@@ -6,7 +6,7 @@ import os
 import threading
 import time
 from datetime import datetime
-from repository import BookAPIFactory
+from repository._book_repo import BookAPIFactory
 
 
 class BarCodeScanner:
@@ -43,20 +43,28 @@ class BarCodeScanner:
                 writer = csv.writer(f)
                 writer.writerow(self.column_titles)
 
-    def save_to_csv(self, info: dict):
-        """Save to CSV"""
-        with open(self.out_path, "a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                [
-                    info["isbn"],
-                    info["title"],
-                    info["author"],
-                    info["publisher"],
-                    info["publication_year"],
-                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                ]
-            )
+    def save_to_db(self, info: dict):
+        """Save to Database via Controller"""
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        
+        from services.book_service import BookActionController
+        from models._book_model import BookModel
+        
+        try:
+            controller = BookActionController()
+            book_model = BookModel(**info)
+            res = controller.handle_add(book_model)
+            
+            if isinstance(res, str) and res.startswith("Error"):
+                print(f"  Failed to save to database: {res}")
+            elif isinstance(res, str) and res.startswith("Validation Error"):
+                print(f"  Validation Error: {res}")
+            else:
+                print("  Successfully saved to database!")
+        except Exception as e:
+            print(f"  Error saving to database: {e}")
 
     def get_book_info(self, isbn: str):
 
@@ -87,8 +95,7 @@ class BarCodeScanner:
             print(f"Publisher : {info['publisher']}")
             print(f"Published : {info['publication_year']}")
 
-            self.save_to_csv(info)
-            print(f"Saved to {self.out_path}")
+            self.save_to_db(info)
         else:
             print(f"No book found for ISBN: {isbn}")
 
@@ -152,7 +159,10 @@ class BarCodeScanner:
                     isbn = result.text
                     current_time = time.time()
                     # only scan if 3 seconds have passed since last scan
-                    if isbn not in self.scanned and (current_time - self.last_scan_time) > 3:
+                    if (
+                        isbn not in self.scanned
+                        and (current_time - self.last_scan_time) > 3
+                    ):
                         self.scanned.add(isbn)
                         self.last_scan_time = current_time
                         thread = threading.Thread(

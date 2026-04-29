@@ -101,19 +101,27 @@ def process_isbn(isbn):
         print(f"  Publisher : {info['publisher']}")
         print(f"  Published : {info['publication_year']}")
 
-        #apita meeka database ekta return karanna oone dictionary output ekk
-        with open(csv_file, "a", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([
-                info["isbn"],
-                info["title"],
-                info["author"],
-                info["publisher"],
-                info["publication_year"],
-                datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            ])
-        print(f"  Saved to {csv_file}")
-    # return   
+        # Save to database
+        import sys
+        import os
+        sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        
+        from services.book_service import BookActionController
+        from models._book_model import BookModel
+        
+        try:
+            controller = BookActionController()
+            book_model = BookModel(**info)
+            res = controller.handle_add(book_model)
+            
+            if isinstance(res, str) and res.startswith("Error"):
+                print(f"  Failed to save to database: {res}")
+            elif isinstance(res, str) and res.startswith("Validation Error"):
+                print(f"  Validation Error: {res}")
+            else:
+                print("  Successfully saved to database!")
+        except Exception as e:
+            print(f"  Error saving to database: {e}")
     else:
         print(f"  No book found for ISBN: '{isbn}'")
 

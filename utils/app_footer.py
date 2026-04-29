@@ -1,5 +1,5 @@
 from tkinter import ttk
-from config import APP_FOOTER_TEXT_1, APP_FOOTER_TEXT_2
+from config.configure import APP_FOOTER_TEXT_1, APP_FOOTER_TEXT_2
 
 
 class AppFooter(ttk.Frame):

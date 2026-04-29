@@ -42,13 +42,16 @@ class BookView(ttk.Frame):
             BookExternalModels(container)
 
         def open_delete_book_model():
-            pass
+            from tkinter import messagebox
+            messagebox.showinfo("Info", "Delete book feature coming soon!")
 
         def open_update_book_model():
-            pass
+            from tkinter import messagebox
+            messagebox.showinfo("Info", "Update book feature coming soon!")
 
         def open_clear_book_model():
-            pass
+            from tkinter import messagebox
+            messagebox.showinfo("Info", "Clear feature coming soon!")
 
         ButtonToolBar(
             container,
