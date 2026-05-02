@@ -1,11 +1,17 @@
-from .search import SearchComponent
-from .details import BookForm
-from .buttons import ButtonToolBar, MiniButtonBar, ScanButton
-from .list_view import (
+from .SearchComponent import SearchComponent
+from .FormComponent import BookForm
+from .ToolBarComponent import ButtonToolBar, MiniButtonBar, ScanButton
+from .ListViewComponents import (
     BookListView,
     MemberListView,
     AuthorListView,
     PublisherListView,
     BarrowBookListView,
 )
-from .external_window import ExternalWindow, BookExternalModels
+from .WindowComponent import (
+    WindowClass,
+    BookWindow,
+    AuthorWindow,
+    MemberWindow,
+    PublisherWindow,
+)

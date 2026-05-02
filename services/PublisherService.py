@@ -1,6 +1,6 @@
 from tkinter import messagebox
-from models._publisher_model import PublisherModel
-from repository._publisher_repo import PublisherRepository
+from models.PublisherModel import PublisherModel
+from repository.PublisherRepository import PublisherRepository
 
 
 class PublisherActionController:

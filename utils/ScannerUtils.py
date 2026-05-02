@@ -106,8 +106,8 @@ def process_isbn(isbn):
         import os
         sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         
-        from services.book_service import BookActionController
-        from models._book_model import BookModel
+        from services.BookService import BookActionController
+        from models.BookModel import BookModel
         
         try:
             controller = BookActionController()

@@ -1,8 +1,8 @@
 import requests
 import os
 import csv
-from models._book_model import BookModel
-from utils.db_connection import DBConnection
+from models.BookModel import BookModel
+from utils.DBConnection import DBConnection
 from ._repository_class import API, Repository
 
 

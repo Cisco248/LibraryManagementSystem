@@ -2,9 +2,9 @@ import csv
 import logging
 import os
 from tkinter import messagebox
-from models._member_model import MemberModel
+from models.MemberModel import MemberModel
 from repository._repository_class import Repository
-from utils.db_connection import DBConnection
+from utils.DBConnection import DBConnection
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
