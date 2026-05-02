@@ -6,7 +6,7 @@ import os
 import threading
 import time
 from datetime import datetime
-from repository._book_repo import BookAPIFactory
+from repository.BookRepository import BookAPIFactory
 
 
 class BarCodeScanner:
@@ -49,8 +49,8 @@ class BarCodeScanner:
         import os
         sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         
-        from services.book_service import BookActionController
-        from models._book_model import BookModel
+        from services.BookService import BookActionController
+        from models.BookModel import BookModel
         
         try:
             controller = BookActionController()

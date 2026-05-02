@@ -1,7 +1,7 @@
 from tkinter import messagebox
-from models._author_model import AuthorModel
-from repository._author_repo import AuthorRepository
-from services._controller_class import Controller
+from models.AuthorModel import AuthorModel
+from repository.AuthorRepository import AuthorRepository
+from services._service_class import Controller
 
 
 class AuthorActionController(Controller):

@@ -1,7 +1,7 @@
 from tkinter import messagebox, ttk
 import tkinter as tk
-from models._member_model import MemberModel
-from repository._member_repo import MemberRepository
+from models.MemberModel import MemberModel
+from repository.MemberRepository import MemberRepository
 
 
 class MemberActionController:

@@ -1,15 +1,9 @@
-"""
-Library Management System - Main Application
-
-This is the entry point for the Library Management System GUI application.
-Uses tkinter (ttk) for the user interface and implements MVC architecture.
-"""
-
 from tkinter import Tk, ttk
 
-from config.configure import APP_TITLE
-from utils import app_header, app_footer
+from config.Configuration import APP_TITLE
+from views.components import AppHeader
 from views import BookView, AuthorView, PublisherView, MemberView
+from views.components import AppFooter
 
 
 class MainAppRunner:
@@ -21,17 +15,17 @@ class MainAppRunner:
         self.root.update_idletasks()
         self.root.wm_minsize(800, 1000)
 
-        app_header.AppHeader(self.root)
+        AppHeader.AppHeader(self.root)
 
         Root = self.ContentFrame(self.root)
-        self.NoteBook(Root)
-        
-        BookView(self.notebook)
-        AuthorView(self.notebook)
-        PublisherView(self.notebook)
-        MemberView(self.notebook)
+        second_root = self.NoteBook(Root)
 
-        app_footer.AppFooter(self.root)
+        BookView(second_root).update_idletasks()
+        AuthorView(second_root).update_idletasks()
+        PublisherView(second_root).update_idletasks()
+        MemberView(second_root).update_idletasks()
+
+        AppFooter.AppFooter(self.root)
 
     def NoteBook(self, master: ttk.Frame):
         self.notebook = ttk.Notebook(master)

@@ -4,8 +4,8 @@ from tkinter import messagebox
 
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from services._controller_class import Controller
-from models._book_model import BookModel
+from services._service_class import Controller
+from models.BookModel import BookModel
 from repository import BookRepository
 
 

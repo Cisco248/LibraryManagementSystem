@@ -2,9 +2,9 @@ import csv
 import logging
 import os
 from tkinter import messagebox
-from models._publisher_model import PublisherModel
+from models.PublisherModel import PublisherModel
 from repository._repository_class import Repository
-from utils.db_connection import DBConnection
+from utils.DBConnection import DBConnection
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

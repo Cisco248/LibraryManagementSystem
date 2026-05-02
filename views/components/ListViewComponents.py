@@ -1,8 +1,8 @@
 from tkinter import ttk
-from services.book_service import BookActionController
-from services.author_service import AuthorActionController
-from services.member_service import MemberActionController
-from services.publisher_service import PublisherActionController
+from services.BookService import BookActionController
+from services.AuthorService import AuthorActionController
+from services.MemberService import MemberActionController
+from services.PublisherService import PublisherActionController
 
 
 class BookListView(ttk.Frame):

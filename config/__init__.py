@@ -1,0 +1,13 @@
+from .Configuration import (
+    BASE_DIR,
+    APP_TITLE,
+    APP_RESIZABLE,
+    APP_HEADER_TITLE,
+    APP_FOOTER_TEXT_1,
+    APP_FOOTER_TEXT_2,
+    COLUMN_TITLES,
+    THEME,
+    PADDING,
+    BUTTON_WIDTH,
+    ENTRY_WIDTH,
+)
