@@ -1,69 +1,108 @@
-from tkinter import ttk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 
+from services.BookService import BookActionController
 from utils.DBConnection import DBConnection
-
-from .components import (
-    SearchComponent,
-    ButtonToolBar,
-    BookListView,
-    BarrowBookListView,
-    MiniButtonBar,
-)
-
-from .components import BookWindow
+from views.components import SearchComponent
+from views.components.DashBoard import Dashboard
+from views.components.FormComponent import BookForm
+from views.components.ListViewComponents import BookListView
+from views.components.ToolBarComponent import ButtonToolBar
 
 
 class BookView(ttk.Frame):
     def __init__(self, parent: ttk.Notebook) -> None:
         super().__init__(parent)
+        self.services = BookActionController()
+        self.db = DBConnection()
 
         self.frame = ttk.Frame(parent)
         parent.add(self.frame, text="Books")
-        self.tab_frame(self.frame)
 
-    def tab_frame(self, Tab: ttk.Frame):
-        SearchComponent(
+        for i in range(5):
+            self.frame.rowconfigure(i)
+
+        self.frame.rowconfigure(5)
+        self.frame.columnconfigure(0, weight=1)
+
+        self.__widget__(self.frame)
+        self.__layout__()
+
+    def __widget__(self, Tab: ttk.Frame):
+        self.dashboard = Dashboard(Tab)
+        self.search_component = SearchComponent(
             Tab,
             title="Search Books",
             button_text="Search",
-            lable_text="Title / ISBN",
-            table="books",
-            parameter1="isbn",
-            parameter2="title",
+            label_text="Title/ISBN",
+            service=self.services,
         )
+        self.bf = BookForm(Tab, title="Book Form")
+        self.buttonbar = ButtonToolBar(
+            parent=Tab,
+            title="Book Operations",
+            add_func=self._add_book,
+            del_func=self._delete_book,
+            update_func=self._update_book,
+            clear_func=self.bf.__clear__,
+            import_func=self._import_books,
+            export_func=self.services.handle_export,
+        )
+        self.list = BookListView(Tab, form=self.bf)
 
-        def __add__():
-            BookWindow(self.frame, "Add Book").add_event()
+    def __layout__(self):
+        self.dashboard.grid(row=0, column=0, sticky="ew", padx=8, pady=4)
+        self.search_component.grid(row=1, column=0, sticky="ew", padx=8, pady=4)
+        self.bf.grid(row=2, column=0, sticky="ew", padx=8, pady=4)
+        self.buttonbar.grid(row=3, column=0, sticky="ew", padx=8, pady=4)
+        self.list.grid(row=4, column=0, sticky="nsew", padx=8)
 
-        def __delete__():
-            BookWindow(self.frame, "Delete Book").delete_event()
+    def _import_books(self):
+        self.services.handle_import()
 
-        def __update__():
-            BookWindow(self.frame, "Update Book").update_event()
+    def _export_books(self):
+        self.services.handle_export()
 
-        def __clear__():
-            try:
-                db = DBConnection()
-                db.execute("DELETE FROM books")
-                return messagebox.showinfo(
-                    title="Clear Books",
-                    message="Are You Sure, You Want Clear Book List?",
-                    detail=f'Press "OK" Delete the Author Data, Press "Cancel" Discard Task',
+    def _add_book(self):
+
+        data = self.bf.__get__()
+        if not data.isbn:
+            return messagebox.showwarning(
+                title="Error",
+                message="ISBN are required!",
+            )
+
+        return self.services.handle_add(data)
+
+    def _delete_book(self):
+        try:
+            self.data = self.bf.__get__()
+
+            msg = messagebox.askyesno(
+                title="question",
+                message="Are You Sure, You Want To Delete This Book?",
+                detail=f"ISBN: {self.data.isbn} Or Title: {self.data.title}",
+            )
+
+            if msg == True:
+                return self.services.handle_delete(self.data.isbn)
+
+            return messagebox.showinfo(
+                title="Delete Book",
+                message="Book Delete Unsuccessfully!",
+                detail=f"You Discard Task.",
+            )
+
+        except Exception as e:
+            return messagebox.showerror("Error", str(e))
+
+    def _update_book(self):
+        try:
+            data = self.bf.__get__()
+            if not data.isbn:
+                return messagebox.showerror(
+                    title="Error",
+                    message="ISBN is required!",
                 )
-            except Exception as e:
-                return messagebox.showerror("Error", str(e))
-
-        ButtonToolBar(
-            Tab,
-            on_add=__add__,
-            on_delete=__delete__,
-            on_update=__update__,
-            on_clear=__clear__,
-        )
-
-        BookListView(Tab)
-
-        MiniButtonBar(Tab, "Reservation", "Return Back")
-
-        BarrowBookListView(Tab)
+            return self.services.handle_update(data)
+        except Exception as e:
+            return messagebox.showerror(title="Error", message=str(e))

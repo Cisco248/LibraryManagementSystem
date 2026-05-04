@@ -20,32 +20,32 @@ class MemberRepository(Repository):
             ( member_id TEXT PRIMARY KEY, member_name TEXT, contact_no TEXT, age INTEGER, membership_type TEXT, membership_status TEXT );
             """)
 
-        self.load_members()
+    #     self.load_members()
 
-    def load_members(self) -> str:
-        member_csv = os.path.join("database", "member_data.csv")
-        if os.path.exists(member_csv):
-            with open(member_csv, "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                next(reader)
-                for row in reader:
-                    self.database.execute(
-                        """
-                        INSERT OR IGNORE INTO members (
-                        member_id, member_name, contact_no, age, membership_type, membership_status) 
-                        VALUES (?, ?, ?, ?, ?, ?);
-                        """,
-                        (
-                            row[0].strip(),
-                            row[1].strip(),
-                            row[2].strip(),
-                            row[3].strip(),
-                            row[4].strip(),
-                            row[5].strip(),
-                        ),
-                    )
-                return "Members loaded successfully"
-        return f"Member data file not found at {member_csv}"
+    # def load_members(self) -> str:
+    #     member_csv = os.path.join("database", "member_data.csv")
+    #     if os.path.exists(member_csv):
+    #         with open(member_csv, "r", encoding="utf-8") as f:
+    #             reader = csv.reader(f)
+    #             next(reader)
+    #             for row in reader:
+    #                 self.database.execute(
+    #                     """
+    #                     INSERT OR IGNORE INTO members (
+    #                     member_id, member_name, contact_no, age, membership_type, membership_status)
+    #                     VALUES (?, ?, ?, ?, ?, ?);
+    #                     """,
+    #                     (
+    #                         row[0].strip(),
+    #                         row[1].strip(),
+    #                         row[2].strip(),
+    #                         row[3].strip(),
+    #                         row[4].strip(),
+    #                         row[5].strip(),
+    #                     ),
+    #                 )
+    #             return "Members loaded successfully"
+    #     return f"Member data file not found at {member_csv}"
 
     def get_one(self, id: str):
         try:

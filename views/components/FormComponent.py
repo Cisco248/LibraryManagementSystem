@@ -1,97 +1,223 @@
 from tkinter import ttk
 import tkinter as tk
 
+from models.BookModel import BookModel, BookType, BookStatus, FileFormat
+
 from ..widgets import FormEntry
 
 
-class BookForm(tk.LabelFrame):
+class BookForm(ttk.LabelFrame):
 
-    def __init__(self, parent, command):
-        super().__init__(parent, text="Add Book to Library", padx=12, pady=12)
+    def __init__(self, parent, title: str):
+        super().__init__(parent, text=title, padding=(0, 8))
+        for y in range(4):
+            self.columnconfigure(y, weight=1)
 
+        for x in range(3):
+            self.rowconfigure(x)
+
+        self.__widget__()
+        self.__layout__()
+
+    def __widget__(self):
         self.isbn = FormEntry(
-            self, direction="horizontal", name="isbn", label="ISBN", type="entry"
+            self,
+            direction="vertical",
+            name="isbn",
+            label="ISBN*",
+            type="entry",
+            placeholder="E.g: 911-1234-567890",
         )
-        self.isbn.pack(fill="x", pady=(10, 0))
 
         self.title = FormEntry(
-            self, direction="horizontal", name="title", label="Title", type="entry"
+            self,
+            direction="vertical",
+            name="title",
+            label="Title*",
+            type="entry",
+            placeholder="E.g: Python-Project-Book",
         )
-        self.title.pack(fill="x", pady=(10, 0))
 
         self.author = FormEntry(
-            self, direction="horizontal", name="author", label="Author", type="entry"
+            self,
+            direction="vertical",
+            name="author",
+            label="Author*",
+            type="entry",
+            placeholder="E.g: A B John Doe",
         )
-        self.author.pack(fill="x", pady=(10, 0))
 
         self.publisher = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="publisher",
-            label="Publisher",
+            label="Publisher*",
             type="entry",
+            placeholder="E.g: C D John Carter",
         )
-        self.publisher.pack(fill="x", pady=(10, 0))
+
+        self.category = FormEntry(
+            self,
+            direction="vertical",
+            name="category",
+            label="Category*",
+            type="selector",
+            values=[
+                "Fantasy",
+                "Romance",
+                "Horror",
+                "Adventure",
+                "Historical",
+                "Biography",
+                "Autobiography",
+                "Self-Help",
+                "Health & Fitness",
+                "Business",
+                "Economics",
+                "Technology",
+                "Programming",
+                "Science",
+                "Mathematics",
+                "Education",
+                "Religion",
+                "Philosophy",
+                "Psychology",
+                "Politics",
+                "Travel",
+                "Cooking",
+                "Food",
+                "Art",
+                "Music",
+                "Sports",
+                "Children Books",
+                "Young Adult",
+                "Comics",
+            ],
+            placeholder="E.g: IT and Computing",
+        )
 
         self.year = FormEntry(
-            self, direction="horizontal", name="year", label="Year", type="entry"
+            self,
+            direction="vertical",
+            name="year",
+            label="Year*",
+            type="entry",
+            placeholder="E.g: 2020",
         )
-        self.year.pack(fill="x", pady=(10, 0))
 
         self.book_type = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="book_type",
-            label="Book Type",
+            label="Type*",
             type="selector",
             values=["Printed", "Digital"],
+            placeholder="E.g: Printed",
         )
-        self.book_type.pack(fill="x", pady=(10, 0))
 
         self.status = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="status",
-            label="Status",
+            label="Status*",
             type="selector",
             values=["Available", "Unavailable", "Borrowed", "Reserved"],
+            placeholder="E.g: Available",
         )
-        self.status.pack(fill="x", pady=(10, 0))
 
         self.file_format = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="file_format",
             label="File Format",
             type="selector",
             values=["HARDCOPY", "PDF", "EPUB", "MOBI"],
+            placeholder="E.g: Hard Copy",
         )
-        self.file_format.pack(fill="x", pady=(10, 0))
 
-        self.file_size = FormEntry(
+        self.price = FormEntry(
             self,
-            direction="horizontal",
-            name="file_size",
-            label="File Size",
+            direction="vertical",
+            name="price",
+            label="Price*",
             type="entry",
+            placeholder="E.g: LKR 1000",
         )
-        self.file_size.pack(fill="x", pady=(10, 0))
 
-        submit_btn = ttk.Button(self, text="Submit", padding=(8, 4), command=command)
-        submit_btn.pack(pady=(10, 0))
+        self.ratings = FormEntry(
+            self,
+            direction="vertical",
+            name="ratings",
+            label="Ratings",
+            type="selector",
+            values=[
+                "⭐",
+                "⭐⭐",
+                "⭐⭐⭐",
+                "⭐⭐⭐⭐",
+                "⭐⭐⭐⭐⭐",
+            ],
+            placeholder="E.g: 4.5",
+        )
+
+    def __layout__(self):
+        self.isbn.grid(column=0, row=0, padx=4, sticky="ew")
+        self.title.grid(column=1, row=0, padx=4, sticky="ew")
+        self.author.grid(column=2, row=0, padx=4, sticky="ew")
+        self.publisher.grid(column=3, row=0, padx=4, sticky="ew")
+
+        self.category.grid(column=0, row=1, padx=4, sticky="ew")
+        self.year.grid(column=1, row=1, padx=4, sticky="ew")
+        self.book_type.grid(column=2, row=1, padx=4, sticky="ew")
+        self.status.grid(column=3, row=1, padx=4, sticky="ew")
+
+        self.file_format.grid(column=0, row=2, padx=4, sticky="ew")
+        self.price.grid(column=1, row=2, padx=4, sticky="ew")
+        self.ratings.grid(column=2, row=2, padx=4, sticky="ew")
 
     def __get__(self):
-        return {
-            "isbn": self.isbn.__get__(),
-            "title": self.title.__get__(),
-            "author": self.author.__get__(),
-            "publisher": self.publisher.__get__(),
-            "year": self.year.__get__(),
-            "book_type": self.book_type.__get__(),
-            "status": self.status.__get__(),
-            "file_format": self.file_format.__get__(),
-            "file_size": self.file_size.__get__(),
-        }
+        return BookModel(
+            isbn=self.isbn.__get__(),
+            title=self.title.__get__(),
+            author=self.author.__get__(),
+            publisher=self.publisher.__get__(),
+            category=self.category.__get__(),
+            publication_year=self.year.__get__(),
+            book_type=BookType(self.book_type.__get__()),
+            status=BookStatus(self.status.__get__()),
+            file_format=FileFormat(self.file_format.__get__()),
+            price=self.price.__get__(),
+            ratings=self.ratings.__get__(),
+        )
+
+    def __set__(self, data: dict):
+        self.isbn.__set__(data.get("isbn", ""))
+        self.title.__set__(data.get("title", ""))
+        self.author.__set__(data.get("author", ""))
+        self.publisher.__set__(data.get("publisher", ""))
+        self.category.__set__(data.get("category", ""))
+        self.year.__set__(data.get("year", ""))
+        self.book_type.__set__(data.get("book_type", ""))
+        self.status.__set__(data.get("status", ""))
+        self.file_format.__set__(data.get("file_format", ""))
+        self.price.__set__(data.get("price", ""))
+        self.ratings.__set__(data.get("ratings", ""))
+
+    def __clear__(self):
+        for field in [
+            self.isbn,
+            self.title,
+            self.author,
+            self.publisher,
+            self.category,
+            self.year,
+            self.book_type,
+            self.status,
+            self.file_format,
+            self.price,
+            self.ratings,
+        ]:
+            field.__clear__()
 
 
 class AuthorForm(tk.LabelFrame):

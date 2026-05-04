@@ -32,7 +32,8 @@ class PublisherView(ttk.Frame):
         def __clear__():
             try:
                 db = DBConnection()
-                db.execute("DELETE FROM books")
+                db.execute("DELETE FROM publishers")
+
                 return messagebox.showinfo(
                     title="Clear Publishers",
                     message="Are You Sure, You Want Clear Publisher List?",
@@ -45,18 +46,17 @@ class PublisherView(ttk.Frame):
             Tab,
             title="Search Publisher",
             button_text="Search",
-            lable_text="ID/Name: ",
-            table="publishers",
-            parameter1="publisher_id",
-            parameter2="publisher_name",
+            label_text="ID/Name: ",
+            service=None,
         )
 
         ButtonToolBar(
-            Tab,
+            parent=Tab,
+            title="Publisher Operations",
             on_add=__add__,
             on_delete=__delete__,
             on_update=__update__,
             on_clear=__clear__,
         )
 
-        PublisherListView(Tab)
+        PublisherListView().__view__(Tab)

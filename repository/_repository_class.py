@@ -32,7 +32,3 @@ class Repository(ABC):
     @abstractmethod
     def delete(self, isbn: str) -> str:
         pass
-
-    @abstractmethod
-    def search(self, **data) -> str:
-        pass

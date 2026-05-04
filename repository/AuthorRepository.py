@@ -27,31 +27,31 @@ class AuthorRepository(Repository):
                 )
                 """)
 
-        self.load_authors()
+    #     self.load_authors()
 
-    def load_authors(self) -> str:
-        author_csv = os.path.join("database", "author_data.csv")
-        if os.path.exists(author_csv):
-            with open(author_csv, "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                next(reader)
-                for row in reader:
-                    self.database.execute(
-                        """
-                        INSERT OR IGNORE INTO authors (
-                        author_id, author_name, address, gov_reg_no, agreement_time) 
-                        VALUES (?, ?, ?, ?, ?);
-                        """,
-                        (
-                            row[0].strip(),
-                            row[1].strip(),
-                            row[2].strip(),
-                            row[3].strip(),
-                            row[4].strip(),
-                        ),
-                    )
-                return "Authors loaded successfully"
-        return "Author data file not found."
+    # def load_authors(self) -> str:
+    #     author_csv = os.path.join("database", "author_data.csv")
+    #     if os.path.exists(author_csv):
+    #         with open(author_csv, "r", encoding="utf-8") as f:
+    #             reader = csv.reader(f)
+    #             next(reader)
+    #             for row in reader:
+    #                 self.database.execute(
+    #                     """
+    #                     INSERT OR IGNORE INTO authors (
+    #                     author_id, author_name, address, gov_reg_no, agreement_time)
+    #                     VALUES (?, ?, ?, ?, ?);
+    #                     """,
+    #                     (
+    #                         row[0].strip(),
+    #                         row[1].strip(),
+    #                         row[2].strip(),
+    #                         row[3].strip(),
+    #                         row[4].strip(),
+    #                     ),
+    #                 )
+    #             return "Authors loaded successfully"
+    #     return "Author data file not found."
 
     def get_one(self, id: str):
         try:

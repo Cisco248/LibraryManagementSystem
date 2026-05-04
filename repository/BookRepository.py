@@ -1,9 +1,21 @@
-import requests
 import os
 import csv
+import requests
+from config.Configuration import (
+    BOOK_TABLE_QUERY,
+    BOOK_IMPORT_PATH,
+    BOOK_IMPORT_QUERY,
+    BOOK_EXPORT_QUERY,
+    BOOK_EXPORT_PATH,
+    BOOK_GET_ONE_QUERY,
+    BOOK_GET_ALL_QUERY,
+    BOOK_ADD_QUERY,
+    BOOK_UPDATE_QUERY,
+    BOOK_DELETE_QUERY,
+)
 from models.BookModel import BookModel
 from utils.DBConnection import DBConnection
-from ._repository_class import API, Repository
+from ._repository_class import API
 
 
 class GoogleBookAPI(API):
@@ -104,40 +116,23 @@ class BookAPIFactory:
         raise ValueError("Book not found in any provider.")
 
 
-class BookRepository(Repository):
-
+class BookRepository:
     def __init__(self):
+
         self.database = DBConnection()
+        self.database.execute(query=BOOK_TABLE_QUERY)
 
-        self.database.execute("""
-                CREATE TABLE IF NOT EXISTS books (
-                    isbn TEXT PRIMARY KEY,
-                    title TEXT,
-                    author TEXT,
-                    publisher TEXT,
-                    publication_year INTEGER,
-                    book_type TEXT,
-                    status TEXT,
-                    file_format TEXT,
-                    file_size TEXT
-                )
-                """)
-
-        self.load_books()
-
-    def load_books(self):
-        book_csv = os.path.join("database", "book_data.csv")
-        if os.path.exists(book_csv):
-            with open(book_csv, "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                next(reader)
-                for row in reader:
-
+    def import_data(self) -> str:
+        self.csv = os.path.join(BOOK_IMPORT_PATH)
+        if os.path.exists(self.csv):
+            with open(self.csv, "r", encoding="utf-8") as f:
+                self.reader = csv.reader(f)
+                next(self.reader)
+                for row in self.reader:
+                    if not row:
+                        return "No Data to Import"
                     self.database.execute(
-                        """
-                            INSERT OR IGNORE INTO books (isbn, title, author, publisher, publication_year, book_type, status, file_format, file_size) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-                            """,
+                        BOOK_IMPORT_QUERY,
                         (
                             row[0].strip(),
                             row[1].strip(),
@@ -148,113 +143,111 @@ class BookRepository(Repository):
                             row[6].strip(),
                             row[7].strip(),
                             row[8].strip(),
+                            row[9].strip(),
+                            row[10].strip(),
                         ),
                     )
-                return "Books loaded successfully"
-        else:
-            return "Book data file not found"
+                return f"Data {len(row)} Imported Successfully"
+        return "Data File Not Found!"
 
-    def get_one(self, isbn: str):
+    def export_data(self) -> str:
         try:
-            rows = self.database.execute(
-                "SELECT * FROM books WHERE isbn = ?", params=(isbn,), fetch=True
+            self.rows = self.database.execute(BOOK_EXPORT_QUERY, fetch=True)
+            if not self.rows:
+                return "No Data to Export"
+            with open(
+                file=BOOK_EXPORT_PATH, mode="w", newline="", encoding="utf-8"
+            ) as f:
+                self.writer = csv.writer(f)
+                self.writer.writerows(self.rows)
+            return f"Data {len(self.rows)} Exported Successfully"
+
+        except Exception as e:
+            return f"{str(e)}"
+
+    def get_one(self, value: str):
+        try:
+            self.rows = self.database.execute(
+                query=BOOK_GET_ONE_QUERY,
+                params=(value,),
+                fetch=True,
             )
-
-            if not rows:
-                return f"Book with ISBN '{isbn}' not found."
-
-            res = rows[0]
-            return BookModel(
-                isbn=res["isbn"],
-                title=res["title"],
-                author=res["author"],
-                publisher=res["publisher"],
-                publication_year=res["publication_year"],
-                book_type=res["book_type"],
-                status=res["status"],
-                file_format=res["file_format"],
-                file_size=res["file_size"],
+            if not self.rows:
+                return "Value Not Found."
+            self.response = self.rows[0]
+            self.result = (
+                self.response[0],
+                self.response[1],
+                self.response[2],
+                self.response[3],
+                self.response[4],
+                self.response[5],
+                self.response[6],
+                self.response[7],
+                self.response[8],
+                self.response[9],
+                self.response[10],
             )
-
+            return self.result
         except Exception as e:
             return f"{str(e)}"
 
     def get_all(self):
         try:
-            res = self.database.execute("SELECT * FROM books", fetch=True)
-            return [
-                BookModel(
-                    isbn=r[0],
-                    title=r[1],
-                    author=r[2],
-                    publisher=r[3],
-                    publication_year=r[4],
-                    book_type=r[5],
-                    status=r[6],
-                    file_format=r[7],
-                    file_size=r[8],
-                )
-                for r in res
-            ]
+            self.res = self.database.execute(BOOK_GET_ALL_QUERY, fetch=True)
+            return [r for r in self.res]
         except Exception as e:
             return f"{str(e)}"
 
     def add(self, data: BookModel):
         try:
             self.database.execute(
-                "INSERT INTO books (isbn, title, author, publisher, publication_year, book_type, status, file_format, file_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                data.to_tuple(),
-            )
-            return f"Book Added Successfully --> ISBN: {data.isbn}"
-        except Exception as e:
-            return f"{str(e)}"
-
-    def update(self, isbn: str, updates: dict):
-        if not updates:
-            return f"Warning: Update details are missing!"
-
-        try:
-            set_clause = ", ".join([f"{key} = ?" for key in updates.keys()])
-            values = list(updates.values())
-            values.append(isbn)
-
-            self.database.execute(
-                f"UPDATE books SET {set_clause} WHERE isbn = ?", tuple(values)
-            )
-            return f"Book with ISBN '{isbn}' updated successfully."
-        except Exception as e:
-            return f"{str(e)}"
-
-    def delete(self, isbn: str):
-        try:
-            self.database.execute("DELETE FROM books WHERE isbn = ?", (isbn,))
-            return f"Book with ISBN '{isbn}' deleted successfully."
-        except Exception as e:
-            return f"{str(e)}"
-
-    def search(self, **data):
-        if not data:
-            return f"No search criteria provided."
-        try:
-            conditions = " AND ".join([f"{key} LIKE ?" for key in data.keys()])
-            values = tuple(f"%{val}%" for val in data.values())
-
-            res = self.database.execute(
-                f"SELECT * FROM books WHERE {conditions}", values, fetch=True
-            )
-            return [
+                BOOK_ADD_QUERY,
                 BookModel(
-                    isbn=r["isbn"],
-                    title=r["title"],
-                    author=r["author"],
-                    publisher=r["publisher"],
-                    publication_year=r["publication_year"],
-                    book_type=r["book_type"],
-                    status=r["status"],
-                    file_format=r["file_format"],
-                    file_size=r["file_size"],
-                )
-                for r in res
-            ]
+                    isbn=data.isbn,
+                    title=data.title,
+                    author=data.author,
+                    publisher=data.publisher,
+                    category=data.category,
+                    publication_year=data.publication_year,
+                    book_type=data.book_type,
+                    status=data.status,
+                    file_format=data.file_format,
+                    price=data.price,
+                    ratings=data.ratings,
+                ).to_tuple(),
+            )
+            return "Data Added Successfully!"
+        except Exception as e:
+            return f"{str(e)}"
+
+    def update(self, data: BookModel):
+        if not data.isbn:
+            return "Values is missing!"
+        try:
+            self.database.execute(
+                query=BOOK_UPDATE_QUERY,
+                params=(
+                    data.title,
+                    data.author,
+                    data.publisher,
+                    data.category,
+                    data.publication_year,
+                    data.book_type.value,
+                    data.status.value,
+                    data.file_format.value,
+                    data.price,
+                    data.ratings,
+                    data.isbn,
+                ),
+            )
+            return "Data Updated Successfully!"
+        except Exception as e:
+            return f"{str(e)}"
+
+    def delete(self, value: str):
+        try:
+            self.database.execute(BOOK_DELETE_QUERY, (value,))
+            return "Data Deleted Successfully."
         except Exception as e:
             return f"{str(e)}"

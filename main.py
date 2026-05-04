@@ -7,25 +7,26 @@ from views.components import AppFooter
 
 
 class MainAppRunner:
-    def __init__(self):
+    def __init__(self, title: str, size: tuple):
         self.root = Tk()
-        self.root.title(APP_TITLE)
+        self.root.title(title)
 
         self.root.resizable(False, False)
-        self.root.update_idletasks()
-        self.root.wm_minsize(800, 1000)
+        self.root.state("zoomed")
+        self.root.wm_minsize(size[0], size[1])
 
-        AppHeader.AppHeader(self.root)
+        AppHeader(self.root)
 
         Root = self.ContentFrame(self.root)
         second_root = self.NoteBook(Root)
 
-        BookView(second_root).update_idletasks()
-        AuthorView(second_root).update_idletasks()
-        PublisherView(second_root).update_idletasks()
-        MemberView(second_root).update_idletasks()
+        BookView(second_root)
+        AuthorView(second_root)
+        PublisherView(second_root)
+        MemberView(second_root)
 
-        AppFooter.AppFooter(self.root)
+        AppFooter(self.root)
+        self.root.mainloop()
 
     def NoteBook(self, master: ttk.Frame):
         self.notebook = ttk.Notebook(master)
@@ -38,10 +39,5 @@ class MainAppRunner:
         return self.frame
 
 
-def main():
-    app = MainAppRunner()
-    app.root.mainloop()
-
-
 if __name__ == "__main__":
-    main()
+    MainAppRunner(title=APP_TITLE, size=(800, 1000))

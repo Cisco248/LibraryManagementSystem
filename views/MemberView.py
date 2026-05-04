@@ -26,7 +26,7 @@ class MemberView(ttk.Frame):
         def __clear__():
             try:
                 db = DBConnection()
-                db.execute("DELETE FROM books")
+                db.execute("DELETE FROM members")
                 return messagebox.showinfo(
                     title="Clear Members",
                     message="Are You Sure, You Want Clear Member List?",
@@ -39,18 +39,17 @@ class MemberView(ttk.Frame):
             Tab,
             title="Search Member",
             button_text="Search",
-            lable_text="ID/Name: ",
-            table="members",
-            parameter1="member_id",
-            parameter2="member_name",
+            label_text="ID/Name: ",
+            service=None,
         )
 
         ButtonToolBar(
-            Tab,
+            parent=Tab,
+            title="Member Operations",
             on_add=__add__,
             on_delete=__delete__,
             on_update=__update__,
             on_clear=__clear__,
         )
 
-        MemberListView(Tab)
+        MemberListView().__view__(Tab)

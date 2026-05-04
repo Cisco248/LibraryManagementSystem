@@ -20,31 +20,31 @@ class PublisherRepository(Repository):
             ( publisher_id TEXT PRIMARY KEY, publisher_name TEXT, address TEXT, gov_reg_no TEXT, agreement_time TEXT );
             """)
 
-        self.load_publishers()
+    #     self.load_publishers()
 
-    def load_publishers(self):
-        publisher_csv = os.path.join("database", "publisher_data.csv")
-        if os.path.exists(publisher_csv):
-            with open(publisher_csv, "r", encoding="utf-8") as f:
-                reader = csv.reader(f)
-                next(reader)
-                for row in reader:
-                    self.database.execute(
-                        """
-                        INSERT OR IGNORE INTO publishers (
-                        publisher_id, publisher_name, address, gov_reg_no, agreement_time) 
-                        VALUES (?, ?, ?, ?, ?);
-                        """,
-                        (
-                            row[0].strip(),
-                            row[1].strip(),
-                            row[2].strip(),
-                            row[3].strip(),
-                            row[4].strip(),
-                        ),
-                    )
-                return "Publishers loaded successfully"
-        return f"Publisher CSV file not found at {publisher_csv}"
+    # def load_publishers(self):
+    #     publisher_csv = os.path.join("database", "publisher_data.csv")
+    #     if os.path.exists(publisher_csv):
+    #         with open(publisher_csv, "r", encoding="utf-8") as f:
+    #             reader = csv.reader(f)
+    #             next(reader)
+    #             for row in reader:
+    #                 self.database.execute(
+    #                     """
+    #                     INSERT OR IGNORE INTO publishers (
+    #                     publisher_id, publisher_name, address, gov_reg_no, agreement_time)
+    #                     VALUES (?, ?, ?, ?, ?);
+    #                     """,
+    #                     (
+    #                         row[0].strip(),
+    #                         row[1].strip(),
+    #                         row[2].strip(),
+    #                         row[3].strip(),
+    #                         row[4].strip(),
+    #                     ),
+    #                 )
+    #             return "Publishers loaded successfully"
+    #     return f"Publisher CSV file not found at {publisher_csv}"
 
     def get_one(self, id: str):
         try:

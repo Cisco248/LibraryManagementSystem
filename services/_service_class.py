@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class Controller(ABC):
 
     @abstractmethod
-    def handle_get_one(self, isbn: str):
+    def handle_get_one(self, value: str) -> str:
         pass
 
     @abstractmethod
@@ -16,9 +16,9 @@ class Controller(ABC):
         pass
 
     @abstractmethod
-    def handle_update(self, isbn: str, data: dict):
+    def handle_update(self, value: str, data: dict):
         pass
 
     @abstractmethod
-    def handle_delete(self, isbn: str):
+    def handle_delete(self, value: str):
         pass

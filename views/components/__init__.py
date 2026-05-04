@@ -6,7 +6,6 @@ from .ListViewComponents import (
     MemberListView,
     AuthorListView,
     PublisherListView,
-    BarrowBookListView,
 )
 from .WindowComponent import (
     WindowClass,
@@ -15,3 +14,5 @@ from .WindowComponent import (
     MemberWindow,
     PublisherWindow,
 )
+from .AppHeader import AppHeader
+from .AppFooter import AppFooter
