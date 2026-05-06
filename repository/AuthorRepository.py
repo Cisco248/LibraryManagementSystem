@@ -1,15 +1,20 @@
 import csv
-import logging
 import os
-from tkinter import messagebox
+from config.Configuration import (
+    AUTHOR_TABLE_QUERY,
+    AUTHOR_IMPORT_QUERY,
+    AUTHOR_IMPORT_PATH,
+    AUTHOR_UPDATE_QUERY,
+    AUTHOR_GET_ONE_QUERY,
+    AUTHOR_GET_ALL_QUERY,
+    AUTHOR_ADD_QUERY,
+    AUTHOR_DELETE_QUERY,
+    AUTHOR_EXPORT_QUERY,
+    AUTHOR_EXPORT_PATH,
+)
 from models.AuthorModel import AuthorModel
 from repository._repository_class import Repository
-
-# from config.configure import ARGS
 from utils.DBConnection import DBConnection
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 class AuthorRepository(Repository):
@@ -17,31 +22,17 @@ class AuthorRepository(Repository):
     def __init__(self):
         self.database = DBConnection()
 
-        self.database.execute("""
-                CREATE TABLE IF NOT EXISTS authors (
-                    author_id TEXT PRIMARY KEY,
-                    author_name TEXT,
-                    address TEXT,
-                    gov_reg_no TEXT,
-                    agreement_time DATE
-                )
-                """)
+        self.database.execute(AUTHOR_TABLE_QUERY)
 
-        self.load_authors()
-
-    def load_authors(self) -> str:
-        author_csv = os.path.join("database", "author_data.csv")
+    def import_data(self):
+        author_csv = os.path.join(AUTHOR_IMPORT_PATH)
         if os.path.exists(author_csv):
             with open(author_csv, "r", encoding="utf-8") as f:
                 reader = csv.reader(f)
                 next(reader)
                 for row in reader:
                     self.database.execute(
-                        """
-                        INSERT OR IGNORE INTO authors (
-                        author_id, author_name, address, gov_reg_no, agreement_time) 
-                        VALUES (?, ?, ?, ?, ?);
-                        """,
+                        AUTHOR_IMPORT_QUERY,
                         (
                             row[0].strip(),
                             row[1].strip(),
@@ -50,57 +41,59 @@ class AuthorRepository(Repository):
                             row[4].strip(),
                         ),
                     )
-                return "Authors loaded successfully"
-        return "Author data file not found."
+                return f"Data {len(row)} Imported Successfully"
+        return "Data File Not Found."
+
+    def export_data(self):
+        try:
+            self.rows = self.database.execute(AUTHOR_EXPORT_QUERY, fetch=True)
+            if not self.rows:
+                return "No Data to Export"
+            with open(
+                file=AUTHOR_EXPORT_PATH, mode="w", newline="", encoding="utf-8"
+            ) as f:
+                self.writer = csv.writer(f)
+                self.writer.writerows(self.rows)
+            return f"Data {len(self.rows)} Exported Successfully"
+
+        except Exception as e:
+            return f"{str(e)}"
 
     def get_one(self, id: str):
         try:
-
-            rows = self.database.execute(
-                "SELECT * FROM author WHERE author_id = %s", params=(id,), fetch=True
+            self.rows = self.database.execute(
+                AUTHOR_GET_ONE_QUERY, params=(id,), fetch=True
             )
-
-            if not rows:
-                return f"Author with ID '{id}' not found."
-
-            res = rows[0]
-            return AuthorModel(
-                author_id=res.get("author_id", ""),
-                author_name=res.get("author_name", ""),
-                address=res.get("address", ""),
-                gov_reg_no=res.get("gov_reg_no", ""),
-                agreement_time=res.get("agreement_time", 0),
+            if not self.rows:
+                return f"Value Not Found."
+            self.response = self.rows[0]
+            self.result = (
+                self.response[0],
+                self.response[1],
+                self.response[2],
+                self.response[3],
+                self.response[4],
             )
+            return self.result
 
         except Exception as e:
             return f"{str(e)}"
 
     def get_all(self):
         try:
-
-            res = self.database.execute(
-                query="SELECT * FROM authors", params=(), fetch=True
+            self.res = self.database.execute(
+                query=AUTHOR_GET_ALL_QUERY, params=(), fetch=True
             )
-            return [
-                AuthorModel(
-                    author_id=r[0],
-                    author_name=r[1],
-                    address=r[2],
-                    gov_reg_no=r[3],
-                    agreement_time=r[4],
-                )
-                for r in res
-            ]
+            return [r for r in self.res]
         except Exception as e:
-            return f"Error retrieving all authors: {str(e)}"
+            return f"{str(e)}"
 
     def add(self, author: AuthorModel):
         if self.get_one(author.author_id):
-            return f"Author with ID '{author.author_id}' already exists."
-
+            return f"Author Already Exists."
         try:
             self.database.execute(
-                "INSERT INTO author (author_id, author_name, address, gov_reg_no, agreement_time) VALUES (%s, %s, %s, %s, %s)",
+                AUTHOR_ADD_QUERY,
                 (
                     author.author_id,
                     author.author_name,
@@ -109,58 +102,33 @@ class AuthorRepository(Repository):
                     author.agreement_time,
                 ),
             )
-            return f"Author added successfully: {author.author_name}"
-
+            return f"Author Added Successfully"
         except Exception as e:
             return f"{str(e)}"
 
-    def update(self, id: str, updates: dict):
-        if not updates:
-            return "No updates provided."
-
+    def update(self, data: AuthorModel):
+        if not data.author_id:
+            return "Values is missing!"
         try:
-            set_clause = ", ".join([f"{key} = %s" for key in updates.keys()])
-            values = list(updates.values())
-            values.append(id)
-
             self.database.execute(
-                f"UPDATE authors SET {set_clause} WHERE author_id = %s", tuple(values)
+                query=AUTHOR_UPDATE_QUERY,
+                params=(
+                    data.author_id,
+                    data.author_name,
+                    data.address,
+                    data.gov_reg_no,
+                    data.agreement_time,
+                ),
             )
-            return f"Author with ID '{id}' updated successfully."
-
+            return "Data Updated Successfully!"
         except Exception as e:
-            return f"Failed to update author: {str(e)}"
+            return f"{str(e)}"
 
     def delete(self, id: str) -> str:
         if not self.get_one(id):
-            return f"Author with ID '{id}' not found."
-
+            return f"Author Not Found."
         try:
-            self.database.execute("DELETE FROM authors WHERE author_id = %s", (id,))
-            return f"Author with ID '{id}' deleted successfully."
-
-        except Exception as e:
-            return f"{str(e)}"
-
-    def search(self, **criteria):
-        if not criteria:
-            return "No search criteria provided."
-        try:
-            conditions = " AND ".join([f"{key} LIKE %s" for key in criteria.keys()])
-            values = tuple(f"%{val}%" for val in criteria.values())
-
-            res = self.database.execute(
-                f"SELECT * FROM authors WHERE {conditions}", values, fetch=True
-            )
-            return [
-                AuthorModel(
-                    author_id=r.get("author_id", ""),
-                    author_name=r.get("author_name", ""),
-                    address=r.get("address", ""),
-                    gov_reg_no=r.get("gov_reg_no", ""),
-                    agreement_time=r.get("agreement_time", 0),
-                )
-                for r in res
-            ]
+            self.database.execute(AUTHOR_DELETE_QUERY, (id,))
+            return f"Author Deleted Successfully."
         except Exception as e:
             return f"{str(e)}"

@@ -10,4 +10,5 @@ from .Configuration import (
     PADDING,
     BUTTON_WIDTH,
     ENTRY_WIDTH,
+    BOOK_DASHBOARD_QUERY,
 )

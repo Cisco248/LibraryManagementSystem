@@ -1,159 +1,148 @@
 from tkinter import ttk
+from config.Configuration import (
+    AUTHOR_LIST_COLUMN,
+    AUTHOR_LIST_HEADING,
+    BOOK_LIST_COLUMN,
+    BOOK_LIST_HEADING,
+    MEMBER_LIST_COLUMN,
+    MEMBER_LIST_HEADING,
+    PUBLISHER_LIST_COLUMN,
+    PUBLISHER_LIST_HEADING,
+)
+from models.PublisherModel import PublisherModel
+from models.AuthorModel import AuthorModel
+from models.MemberModel import MemberModel
 from services.BookService import BookActionController
 from services.AuthorService import AuthorActionController
 from services.MemberService import MemberActionController
 from services.PublisherService import PublisherActionController
+from utils.Styles import ListStyle
 
 
 class BookListView(ttk.Frame):
-    def __init__(self, master: ttk.Widget):
+    def __init__(self, master: ttk.Widget, form):
         super().__init__(master)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1)
 
-        self.pack(fill="both", expand=True, padx=12, pady=6)
+        self.controller = BookActionController()
+        self.form = form
+        self.style = ListStyle(widget="TreeView", component="Heading")
+        self.style.__map__()
 
         self.list_view = ttk.Treeview(
-            self,
-            columns=[
-                "isbn",
-                "title",
-                "author",
-                "publisher",
-                "publication_year",
-                "book_type",
-                "status",
-                "file_format",
-                "file_size",
-            ],
-            show="headings",
+            self, columns=BOOK_LIST_COLUMN, show="headings", height=22
         )
-        self.list_view.heading("isbn", text="ISBN")
-        self.list_view.heading("title", text="Title")
-        self.list_view.heading("author", text="Author")
-        self.list_view.heading("publisher", text="Publisher")
-        self.list_view.heading("publication_year", text="Year")
-        self.list_view.heading("book_type", text="Type")
-        self.list_view.heading("status", text="Status")
-        self.list_view.heading("file_format", text="Format")
-        self.list_view.heading("file_size", text="Size")
+        self.scrollbar = ttk.Scrollbar(self, orient="vertical")
+
+        headings = BOOK_LIST_HEADING
+        if isinstance(headings, dict):
+            headings = headings.items()
+
+        for heading in headings:
+            if isinstance(heading, (list, tuple)) and len(heading) == 2:
+                column, text = heading
+            else:
+                column = heading
+                text = heading
+            self.list_view.heading(column, text=text)
 
         self.list_view.column("isbn", width=120, anchor="center")
         self.list_view.column("title", width=200, anchor="center")
         self.list_view.column("author", width=150, anchor="center")
         self.list_view.column("publisher", width=150, anchor="center")
+        self.list_view.column("category", width=150, anchor="center")
         self.list_view.column("publication_year", width=80, anchor="center")
         self.list_view.column("book_type", width=100, anchor="center")
         self.list_view.column("status", width=100, anchor="center")
         self.list_view.column("file_format", width=80, anchor="center")
-        self.list_view.column("file_size", width=100, anchor="center")
+        self.list_view.column("price", width=100, anchor="center")
+        self.list_view.column("ratings", width=100, anchor="center")
 
-        self.list_view.pack(fill="both", expand=True)
+        self.list_view.bind("<<TreeviewSelect>>", self.__select__)
 
-        self.add_sample_data()
+        self.list_view.grid(column=0, row=0, columnspan=2, sticky="nsew")
+        self.scrollbar.grid(column=1, row=0, sticky="ns")
 
-    def add_sample_data(self):
-        """Fetch real data from database via controller"""
-        controller = BookActionController()
-        books = controller.handle_get_all()
+        self.__add__()
 
+    def __select__(self, event):
+        selected = self.list_view.selection()
+        if not selected or not self.form:
+            return
+
+        item = self.list_view.item(selected[0])
+        values = item["values"]
+
+        data = {
+            "isbn": values[0],
+            "title": values[1],
+            "author": values[2],
+            "publisher": values[3],
+            "category": values[4],
+            "year": values[5],
+            "book_type": values[6],
+            "status": values[7],
+            "file_format": values[8],
+            "price": values[9],
+            "ratings": values[10],
+        }
+
+        self.form.__set__(data)
+
+    def __add__(self):
+        books = self.controller.handle_get_all()
         if not isinstance(books, list):
             print("Error retrieving books:", books)
             return
-
         for book in books:
             book_row = (
-                book.isbn,
-                book.title,
-                book.author,
-                book.publisher,
-                book.publication_year,
-                book.book_type,
-                book.status,
-                book.file_format,
-                book.file_size,
+                book[0],
+                book[1],
+                book[2],
+                book[3],
+                book[4],
+                book[5],
+                book[6],
+                book[7],
+                book[8],
+                book[9],
+                book[10],
             )
             self.list_view.insert("", "end", values=book_row)
 
+    def __refresh__(self):
+        for item in self.list_view.get_children():
+            self.list_view.delete(item)
 
-class BarrowBookListView(ttk.Frame):
-    def __init__(self, master: ttk.Widget):
-        super().__init__(master)
-
-        self.pack(fill="both", expand=True, padx=12, pady=6)
-
-        self.list_view = ttk.Treeview(
-            self,
-            columns=[
-                "isbn",
-                "title",
-                "member",
-                "status",
-            ],
-            show="headings",
-        )
-        self.list_view.heading("isbn", text="ISBN")
-        self.list_view.heading("title", text="Title")
-        self.list_view.heading("member", text="Member")
-        self.list_view.heading("status", text="Status")
-
-        self.list_view.column("isbn", width=120, anchor="center")
-        self.list_view.column("title", width=200, anchor="center")
-        self.list_view.column("member", width=200, anchor="center")
-        self.list_view.column("status", width=100, anchor="center")
-
-        self.list_view.pack(fill="both", expand=True)
+        self.__add__()
 
 
 class MemberListView(ttk.Frame):
-    def __init__(self, master: ttk.Widget):
+    def __init__(self, master, form):
         super().__init__(master)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1)
 
-        self.pack(fill="both", expand=True, padx=12, pady=6)
-
-        style = ttk.Style()
-
-        style.configure(
-            "Treeview",
-            background="white",
-            foreground="black",
-            rowheight=25,
-            fieldbackground="white",
-        )
-
-        style.map(
-            "Treeview",
-            background=[("selected", "#0078d7")],
-            foreground=[("selected", "white")],
-        )
-
-        style.configure(
-            "Treeview.Heading",
-            background="#a8a8a8",
-            foreground="black",
-            relief="flat",
-            font=("Poppins", 8, "bold"),
-        )
-
-        style.map("Treeview.Heading", background=[("active", "#e0e0e0")])
-
+        self.style = ListStyle(widget="TreeView", component="Heading")
+        self.style.__map__()
+        self.form = form
         self.list_view = ttk.Treeview(
-            self,
-            columns=[
-                "member_id",
-                "member_name",
-                "contact_no",
-                "age",
-                "membership_type",
-                "membership_status",
-            ],
-            show="headings",
+            self, columns=MEMBER_LIST_COLUMN, show="headings", height=22
         )
+        self.scrollbar = ttk.Scrollbar(self, orient="vertical")
 
-        self.list_view.heading("member_id", text="Member ID")
-        self.list_view.heading("member_name", text="Name")
-        self.list_view.heading("contact_no", text="Contact No")
-        self.list_view.heading("age", text="Age")
-        self.list_view.heading("membership_type", text="Membership Type")
-        self.list_view.heading("membership_status", text="Status")
+        headings = MEMBER_LIST_HEADING
+        if isinstance(headings, dict):
+            headings = headings.items()
+
+        for heading in headings:
+            if isinstance(heading, (list, tuple)) and len(heading) == 2:
+                column, text = heading
+            else:
+                column = heading
+                text = heading
+            self.list_view.heading(column, text=text)
 
         self.list_view.column("member_id", width=120, anchor="center")
         self.list_view.column("member_name", width=200, anchor="center")
@@ -162,99 +151,94 @@ class MemberListView(ttk.Frame):
         self.list_view.column("membership_type", width=150, anchor="center")
         self.list_view.column("membership_status", width=120, anchor="center")
 
-        self.list_view.pack(fill="both", expand=True)
+        self.list_view.bind("<<TreeviewSelect>>", self.__select__)
 
-        self.add_sample_data()
+        self.list_view.grid(column=0, row=0, columnspan=2, sticky="nsew")
+        self.scrollbar.grid(column=1, row=0, sticky="ns")
 
-    def add_sample_data(self):
-        """Fetch real data from database via controller"""
+        self.__add__()
+
+    def __add__(self):
         controller = MemberActionController()
         members = controller.handle_get_all()
-
         if not isinstance(members, list):
             print("Error retrieving members:", members)
             return
-
         for member in members:
-            member_row = (
-                member.member_id,
-                member.member_name,
-                member.contact_no,
-                member.age,
-                member.membership_type,
-                member.membership_status,
-            )
-            self.list_view.insert("", "end", values=member_row)
+            row = MemberModel(
+                member_id=member[0],
+                member_name=member[1],
+                contact_no=member[2],
+                age=member[3],
+                membership_type=member[4],
+                membership_status=member[4],
+            ).to_tuple()
+            self.list_view.insert("", "end", values=row)
+
+    def __select__(self, event):
+        selected = self.list_view.selection()
+        if not selected or not self.form:
+            return
+        item = self.list_view.item(selected[0])
+        values = item["values"]
+        return self.form.__set__(
+            MemberModel(
+                member_id=values[0],
+                member_name=values[1],
+                contact_no=values[2],
+                age=int(values[3]),
+                membership_type=values[4],
+                membership_status=values[5],
+            ).to_dict()
+        )
+
+    def __refresh__(self):
+        for item in self.list_view.get_children():
+            self.list_view.delete(item)
+
+        self.__add__()
 
 
 class AuthorListView(ttk.Frame):
-    def __init__(self, master: ttk.Widget):
+    def __init__(self, master, form):
         super().__init__(master)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1)
 
-        self.pack(fill="both", expand=True, padx=12, pady=6)
-
-        style = ttk.Style()
-
-        style.configure(
-            "Treeview",
-            background="white",
-            foreground="black",
-            rowheight=25,
-            fieldbackground="white",
-        )
-
-        style.map(
-            "Treeview",
-            background=[("selected", "#0078d7")],
-            foreground=[("selected", "white")],
-        )
-
-        style.configure(
-            "Treeview.Heading",
-            background="#a8a8a8",
-            foreground="black",
-            relief="flat",
-            font=("Poppins", 8, "bold"),
-        )
-
-        style.map("Treeview.Heading", background=[("active", "#e0e0e0")])
-
+        self.style = ListStyle(widget="TreeView", component="Heading")
+        self.style.__map__()
         self.list_view = ttk.Treeview(
-            self,
-            columns=[
-                "author_id",
-                "author_name",
-                "address",
-                "gov_reg_no",
-                "author_type",
-                "author_status",
-                "reg_date",
-            ],
-            show="headings",
+            self, columns=AUTHOR_LIST_COLUMN, show="headings", height=22
         )
+        self.form = form
+        self.scrollbar = ttk.Scrollbar(self, orient="vertical")
 
-        self.list_view.heading("author_id", text="Author ID")
-        self.list_view.heading("author_name", text="Name")
-        self.list_view.heading("address", text="Address")
-        self.list_view.heading("gov_reg_no", text="Gov Reg No")
-        self.list_view.heading("author_type", text="Membership Type")
-        self.list_view.heading("author_status", text="Status")
-        self.list_view.heading("reg_date", text="Reg Date")
+        headings = AUTHOR_LIST_HEADING
+        if isinstance(headings, dict):
+            headings = headings.items()
+
+        for heading in headings:
+            if isinstance(heading, (list, tuple)) and len(heading) == 2:
+                column, text = heading
+            else:
+                column = heading
+                text = heading
+            self.list_view.heading(column, text=text)
 
         self.list_view.column("author_id", width=120, anchor="center")
         self.list_view.column("author_name", width=200, anchor="center")
         self.list_view.column("address", width=250, anchor="center")
         self.list_view.column("gov_reg_no", width=80, anchor="center")
-        self.list_view.column("author_type", width=150, anchor="center")
-        self.list_view.column("author_status", width=120, anchor="center")
         self.list_view.column("reg_date", width=120, anchor="center")
 
-        self.list_view.pack(fill="both", expand=True)
+        self.list_view.bind("<<TreeviewSelect>>", self.__select__)
 
-        self.add_sample_data()
+        self.list_view.grid(column=0, row=0, columnspan=2, sticky="nsew")
+        self.scrollbar.grid(column=1, row=0, sticky="ns")
 
-    def add_sample_data(self):
-        """Fetch real data from database via controller"""
+        self.__add__()
+
+    def __add__(self):
         controller = AuthorActionController()
         authors = controller.handle_get_all()
 
@@ -263,68 +247,64 @@ class AuthorListView(ttk.Frame):
             return
 
         for author in authors:
-            author_row = (
-                author.author_id,
-                author.author_name,
-                author.address,
-                author.gov_reg_no,
-                author.agreement_time,
-                "Regular",
-                "Active",
-                "N/A",
-            )
-            self.list_view.insert("", "end", values=author_row)
+            row = AuthorModel(
+                author_id=author[0],
+                author_name=author[1],
+                address=author[2],
+                gov_reg_no=author[3],
+                agreement_time=author[4],
+            ).to_tuple()
+            self.list_view.insert("", "end", values=row)
+
+    def __select__(self, event):
+        selected = self.list_view.selection()
+        if not selected or not self.form:
+            return
+
+        item = self.list_view.item(selected[0])
+        values = item["values"]
+
+        self.form.__set__(
+            AuthorModel(
+                author_id=values[0],
+                author_name=values[1],
+                address=values[2],
+                gov_reg_no=values[3],
+                agreement_time=values[4],
+            ).to_dict()
+        )
+
+    def __refresh__(self):
+        for item in self.list_view.get_children():
+            self.list_view.delete(item)
+        self.__add__()
 
 
 class PublisherListView(ttk.Frame):
-    def __init__(self, master: ttk.Widget):
+    def __init__(self, master, form):
         super().__init__(master)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1)
 
-        self.pack(fill="both", expand=True, padx=12, pady=6)
-
-        style = ttk.Style()
-
-        style.configure(
-            "Treeview",
-            background="white",
-            foreground="black",
-            rowheight=25,
-            fieldbackground="white",
-        )
-
-        style.map(
-            "Treeview",
-            background=[("selected", "#0078d7")],
-            foreground=[("selected", "white")],
-        )
-
-        style.configure(
-            "Treeview.Heading",
-            background="#a8a8a8",
-            foreground="black",
-            relief="flat",
-            font=("Poppins", 8, "bold"),
-        )
-
-        style.map("Treeview.Heading", background=[("active", "#e0e0e0")])
-
+        self.style = ListStyle(widget="TreeView", component="Heading")
+        self.style.__map__()
+        self.form = form
         self.list_view = ttk.Treeview(
-            self,
-            columns=[
-                "publisher_id",
-                "publisher_name",
-                "address",
-                "gov_reg_no",
-                "agreement_time",
-            ],
-            show="headings",
+            self, columns=PUBLISHER_LIST_COLUMN, show="headings", height=22
         )
+        self.scrollbar = ttk.Scrollbar(self, orient="vertical")
 
-        self.list_view.heading("publisher_id", text="Publisher ID")
-        self.list_view.heading("publisher_name", text="Name")
-        self.list_view.heading("address", text="Address")
-        self.list_view.heading("gov_reg_no", text="Gov Reg No")
-        self.list_view.heading("agreement_time", text="Agreement Time")
+        headings = PUBLISHER_LIST_HEADING
+        if isinstance(headings, dict):
+            headings = headings.items()
+
+        for heading in headings:
+            if isinstance(heading, (list, tuple)) and len(heading) == 2:
+                column, text = heading
+            else:
+                column = heading
+                text = heading
+            self.list_view.heading(column, text=text)
 
         self.list_view.column("publisher_id", width=120, anchor="center")
         self.list_view.column("publisher_name", width=200, anchor="center")
@@ -332,23 +312,45 @@ class PublisherListView(ttk.Frame):
         self.list_view.column("gov_reg_no", width=80, anchor="center")
         self.list_view.column("agreement_time", width=150, anchor="center")
 
-        self.list_view.pack(fill="both", expand=True)
+        self.list_view.bind("<<TreeviewSelect>>", self.__select__)
 
-        self.add_sample_data()
+        self.list_view.grid(column=0, row=0, columnspan=2, sticky="nsew")
+        self.scrollbar.grid(column=1, row=0, sticky="ns")
 
-    def add_sample_data(self):
+        self.__add__()
+
+    def __add__(self):
         controller = PublisherActionController()
         publishers = controller.handle_get_all()
-
         if not isinstance(publishers, list):
             raise ValueError("Error retrieving publishers:", publishers)
-
         for publisher in publishers:
-            publisher_row = (
-                publisher.publisher_id,
-                publisher.publisher_name,
-                publisher.address,
-                publisher.gov_reg_no,
-                publisher.agreement_time,
-            )
-            self.list_view.insert("", "end", values=publisher_row)
+            row = PublisherModel(
+                publisher_id=publisher[0],
+                publisher_name=publisher[1],
+                address=publisher[2],
+                gov_reg_no=publisher[3],
+                agreement_time=publisher[4],
+            ).to_tuple()
+            self.list_view.insert("", "end", values=row)
+
+    def __select__(self, event):
+        selected = self.list_view.selection()
+        if not selected or not self.form:
+            return
+        item = self.list_view.item(selected[0])
+        values = item["values"]
+        self.form.__set__(
+            PublisherModel(
+                publisher_id=values[0],
+                publisher_name=values[1],
+                address=values[2],
+                gov_reg_no=values[3],
+                agreement_time=values[4],
+            ).to_dict()
+        )
+
+    def __refresh__(self):
+        for item in self.list_view.get_children():
+            self.list_view.delete(item)
+        self.__add__()

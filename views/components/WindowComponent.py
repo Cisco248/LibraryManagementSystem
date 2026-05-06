@@ -5,6 +5,7 @@ from tkinter import messagebox
 from config.Configuration import COLUMN_TITLES
 from utils.DBConnection import DBConnection
 from utils.BarcodeScanner import BarCodeScanner
+from views.components.ListViewComponents import BookListView
 from views.components.ToolBarComponent import ScanButton
 from views.components.FormComponent import (
     BookForm,
@@ -25,211 +26,59 @@ class WindowClass(tk.Toplevel):
 class BookWindow(WindowClass):
     def __init__(self, parent, title: str):
         super().__init__(parent, title)
+        self.columnconfigure(0, weight=1)
+        self.container = ttk.Frame(self)
+        self.container.pack(fill="both", padx=12, pady=12)
 
     def add_event(self):
-        self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
-        def on_submit():
-            try:
-                db = DBConnection()
-                if (
-                    not self.bf.isbn.__get__()
-                    or not self.bf.title.__get__()
-                    or not self.bf.author.__get__()
-                    or not self.bf.publisher.__get__()
-                    or not self.bf.year.__get__()
-                ):
-                    return messagebox.showerror("Error", "All fields are required!")
-
-                db.execute(
-                    """
-                    INSERT INTO books (isbn, title, author, publisher, publication_year, book_type, status, file_format,  file_size) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """,
-                    (
-                        self.bf.isbn.__get__(),
-                        self.bf.title.__get__(),
-                        self.bf.author.__get__(),
-                        self.bf.publisher.__get__(),
-                        self.bf.year.__get__(),
-                        self.bf.book_type.__get__(),
-                        self.bf.status.__get__(),
-                        self.bf.file_format.__get__(),
-                        self.bf.file_size.__get__(),
-                    ),
-                )
-
-                return messagebox.showinfo(
-                    "Book Data",
-                    message="Book Added Successfully!",
-                    detail=f"""
-                    ISBN: {self.bf.isbn.__get__()}\n
-                    Title: {self.bf.title.__get__()}\n
-                    Author: {self.bf.author.__get__()}\n
-                    Publisher: {self.bf.publisher.__get__()}\n
-                    Year: {self.bf.year.__get__()}\n
-                    Book Type: {self.bf.book_type.__get__()}\n
-                    Status: {self.bf.status.__get__()}\n
-                    File Format: {self.bf.file_format.__get__()}\n
-                    File Size: {self.bf.file_size.__get__()}
-                    """,
-                )
-            except Exception as e:
-                return messagebox.showerror("Error", f"{str(e)}")
-
-        self.bf = BookForm(self.container, command=on_submit)
-        self.bf.pack(fill="both", expand=True, padx=12, pady=12)
-
-        ttk.Separator(self.container, orient="horizontal").pack(
-            fill="x", padx=12, pady=12
-        )
-
-        scanner = BarCodeScanner("books.csv", column_titles=COLUMN_TITLES)
-        ScanButton(self.container, "Scan Now!", scanner.start_scanner).pack(fill="both")
+        pass
 
     def delete_event(self):
-        self.columnconfigure(0, weight=1)
+        pass
+        # self.isbn = FormEntry(
+        #     self.container,
+        #     direction="horizontal",
+        #     name="isbn",
+        #     label="ISBN",
+        #     type="entry",
+        # )
+        # self.isbn.pack(fill="both", pady=12)
 
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
+        # ttk.Separator(self.container, orient="horizontal").pack(
+        #     fill="x", padx=12, pady=12
+        # )
 
-        self.isbn = FormEntry(
-            self.container,
-            direction="horizontal",
-            name="isbn",
-            label="ISBN",
-            type="entry",
-        )
-        self.isbn.pack(fill="both", pady=12)
+        # self.title = FormEntry(
+        #     self.container,
+        #     direction="horizontal",
+        #     name="title",
+        #     label="Title",
+        #     type="entry",
+        # )
+        # self.title.pack(fill="both", pady=12)
 
-        ttk.Separator(self.container, orient="horizontal").pack(
-            fill="x", padx=12, pady=12
-        )
+        # def on_submit():
 
-        self.title = FormEntry(
-            self.container,
-            direction="horizontal",
-            name="title",
-            label="Title",
-            type="entry",
-        )
-        self.title.pack(fill="both", pady=12)
-
-        def on_submit():
-            try:
-                isbn_value = self.isbn.__get__()
-                title_value = self.title.__get__()
-
-                db = DBConnection()
-                db.execute(
-                    """
-                    DELETE FROM books
-                    WHERE isbn = ? OR title = ?
-                    """,
-                    (isbn_value, title_value),
-                )
-
-                messagebox.showinfo(
-                    title="Question",
-                    message="Are You Sure, You Want To Delete This Book?",
-                    detail=f"ISBN: {isbn_value} Or Title: {title_value}",
-                )
-
-            except Exception as e:
-                messagebox.showerror("Error", str(e))
-
-        ttk.Button(self, text="Submit", padding=(8, 4), command=on_submit).pack(
-            pady=(10, 0)
-        )
+        # ttk.Button(self, text="Submit", padding=(8, 4), command=on_submit).pack(
+        #     pady=(10, 0)
+        # )
 
     def update_event(self):
-        self.columnconfigure(0, weight=1)
+        pass
+        # def on_submit():
 
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
-        def on_submit():
-            try:
-                db = DBConnection()
-
-                isbn = self.bf.isbn.__get__()
-                title = self.bf.title.__get__()
-                author = self.bf.author.__get__()
-                publisher = self.bf.publisher.__get__()
-                year = self.bf.year.__get__()
-                book_type = self.bf.book_type.__get__()
-                status = self.bf.status.__get__()
-                file_format = self.bf.file_format.__get__()
-                file_size = self.bf.file_size.__get__()
-
-                if not isbn:
-                    return messagebox.showerror("Error", "ISBN is required!")
-
-                db.execute(
-                    """
-                    UPDATE books
-                    SET 
-                        title = ?,
-                        author = ?,
-                        publisher = ?,
-                        publication_year = ?,
-                        book_type = ?,
-                        status = ?,
-                        file_format = ?,
-                        file_size = ?
-                    WHERE isbn = ?
-                    """,
-                    (
-                        title,
-                        author,
-                        publisher,
-                        year,
-                        book_type,
-                        status,
-                        file_format,
-                        file_size,
-                        isbn,
-                    ),
-                )
-
-                return messagebox.showinfo(
-                    title="Book Update",
-                    message="Book updated successfully!",
-                    detail=f"""
-                    ID: {isbn}\n
-                    Title: {title}\n
-                    Author: {author}\n
-                    Publisher: {publisher}\n
-                    Year: {year}\n
-                    Book Type: {book_type}\n
-                    Status: {status}\n
-                    File Format: {file_format}\n
-                    File Size: {file_size}
-                    """,
-                    icon="info",
-                )
-
-            except Exception as e:
-                return messagebox.showerror(title="Error", message=str(e))
-
-        self.bf = BookForm(self.container, command=on_submit)
-        self.bf.pack(fill="both", expand=True, padx=12, pady=12)
+        # self.bf = BookForm(self.container, command=on_submit, title="")
+        # self.bf.pack(fill="both", expand=True, padx=12, pady=12)
 
 
 class AuthorWindow(WindowClass):
     def __init__(self, parent, title: str):
         super().__init__(parent, title)
         self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
+        self.container = ttk.Frame(self)
         self.container.pack(fill="both", padx=12, pady=12)
 
     def add_event(self):
-        self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         def on_submit():
             try:
                 db = DBConnection()
@@ -276,11 +125,6 @@ class AuthorWindow(WindowClass):
         self.af.pack(fill="both", expand=True, padx=12, pady=12)
 
     def delete_event(self):
-        self.columnconfigure(0, weight=1)
-
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         self.id = FormEntry(
             self.container,
             direction="horizontal",
@@ -332,11 +176,6 @@ class AuthorWindow(WindowClass):
         )
 
     def update_event(self):
-        self.columnconfigure(0, weight=1)
-
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         def on_submit():
             try:
                 db = DBConnection()
@@ -388,14 +227,10 @@ class PublisherWindow(WindowClass):
     def __init__(self, parent, title: str):
         super().__init__(parent, title)
         self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
+        self.container = ttk.Frame(self)
         self.container.pack(fill="both", padx=12, pady=12)
 
     def add_event(self):
-        self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         def on_submit():
             try:
                 db = DBConnection()
@@ -441,11 +276,6 @@ class PublisherWindow(WindowClass):
         self.pf.pack(fill="both", expand=True, padx=12, pady=12)
 
     def delete_event(self):
-        self.columnconfigure(0, weight=1)
-
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         self.id = FormEntry(
             self.container,
             direction="horizontal",
@@ -496,11 +326,6 @@ class PublisherWindow(WindowClass):
         )
 
     def update_event(self):
-        self.columnconfigure(0, weight=1)
-
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         def on_submit():
             try:
                 db = DBConnection()
@@ -554,14 +379,10 @@ class MemberWindow(WindowClass):
     def __init__(self, parent, title: str):
         super().__init__(parent, title)
         self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
+        self.container = ttk.Frame(self)
         self.container.pack(fill="both", padx=12, pady=12)
 
     def add_event(self):
-        self.columnconfigure(0, weight=1)
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         def on_submit():
             try:
                 db = DBConnection()
@@ -610,11 +431,6 @@ class MemberWindow(WindowClass):
         self.mf.pack(fill="both", expand=True, padx=12, pady=12)
 
     def delete_event(self):
-        self.columnconfigure(0, weight=1)
-
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         self.id = FormEntry(
             self.container,
             direction="horizontal",
@@ -665,11 +481,6 @@ class MemberWindow(WindowClass):
         )
 
     def update_event(self):
-        self.columnconfigure(0, weight=1)
-
-        self.container = tk.Frame(self)
-        self.container.pack(fill="both", padx=12, pady=12)
-
         def on_submit():
             try:
                 db = DBConnection()

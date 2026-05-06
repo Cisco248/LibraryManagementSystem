@@ -7,8 +7,7 @@ class FormEntry(ttk.Frame):
         super().__init__(parent)
 
         self.kwargs = kwargs
-        self.value_var = tk.StringVar()
-        self.input = None
+        self.value_var = tk.StringVar(value=f'{self.kwargs.get("placeholder", "")}')
 
         if self.kwargs.get("direction", "") == "horizontal":
             self.columnconfigure(0, weight=1)
@@ -60,7 +59,12 @@ class FormEntry(ttk.Frame):
         return self.value_var.get()
 
     def __set__(self, value):
-        self.value_var.set("" if value is None else str(value))
+        return self.value_var.set("" if value is None else str(value))
+        # if self.kwargs.get("type", "") == "entry":
+        #     self.value_var.set(value)
+
+        # elif self.kwargs.get("type", "") == "selector":
+        #     self.value_var.set(value)
 
     def __clear__(self):
         self.value_var.set("")

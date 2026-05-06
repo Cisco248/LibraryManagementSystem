@@ -1,121 +1,156 @@
 # Library Management System
 
-## Overview
+## Table of Contents
 
-The Library Management System is a Python-based application designed to manage
-books and members in a library. It provides functionalities for adding,
-updating, and deleting books, managing member records, and tracking borrowed
-books.
+- [Project Overview](#project-overview)
+- [Technologies Used](#technologies-used)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Collaborators](#collaborators)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Project Overview
+
+The Library Management System is a modular Python application designed to streamline the management of books, members, authors, and publishers in a library environment. The system supports core library operations such as adding, updating, and deleting records, as well as tracking book borrowing and returns. The project emphasizes maintainability, scalability, and clear separation of concerns.
+
+## Technologies Used
+
+- **Programming Language:** Python 3.6+
+- **Libraries:**
+  - Standard Python libraries (csv, os, etc.)
+  - [Tkinter](https://docs.python.org/3/library/tkinter.html) (for planned GUI)
+- **Project Management:**
+  - [requirements.txt](requirements.txt) for dependencies
+  - [pyproject.toml](pyproject.toml) for project configuration
+
+## Architecture
+
+The application follows a layered architecture with clear separation between models, repositories, services, and views:
+
+- **Models:** Define data structures for books, members, authors, and publishers.
+- **Repositories:** Handle data access and persistence (CSV-based storage).
+- **Services:** Implement business logic and coordinate between repositories and views.
+- **Views:** Provide user interaction (CLI, with plans for GUI components).
+- **Utilities:** Shared helpers for database connections, barcode scanning, and more.
+
+**Directory Structure:**
+
+```sh
+LibraryManagementSystem/
+├── config/         # Configuration management
+├── database/       # CSV data files
+├── docs/           # Documentation
+├── models/         # Data models
+├── repository/     # Data access layer
+├── services/       # Business logic
+├── utils/          # Utility modules
+├── views/          # User interface (CLI/GUI)
+├── assets/         # Diagrams, logos
+├── main.py         # Application entry point
+├── requirements.txt
+├── pyproject.toml
+└── README.md
+```
 
 ## Features
 
 ### Book Management
 
-- Add Books: Add new books with details like title, ISBN, author, category, and
-  status.
-- Update Book Details: Modify book information such as title, author, category,
-  and status.
-- Delete Books: Remove books from the library.
-- Find Books: Search for books by ISBN.
-- View All Books: List all books in the library.
+- Add, update, delete, and search books
+- View all books
 
 ### Member Management
 
-- Add Members: Add new members with details like name, contact number, age, and
-  membership type.
-- Borrow Books: Track books borrowed by members.
-- Return Books: Update the status of books returned by members.
-- Display Member Details: View member details including borrowed books.
+- Add members
+- Track borrowed and returned books
+- View member details
 
-### Additional Features
+### Author & Publisher Management
 
-- Comprehensive error handling for invalid inputs.
-- Modular design for scalability and maintainability.
+- Manage author and publisher records
+
+### Additional
+
+- Error handling for invalid inputs
+- Modular, extensible codebase
 
 ## Installation
 
 1. Clone the repository:
 
-   `git clone https://github.com/your-username/library-management-system.git`
+   ```bash
+   git clone https://github.com/Cisco248/LibraryManagementSystem.git
+   ```
 
 2. Navigate to the project directory:
 
-   `cd library-management-system`
+   ```bash
+   cd LibraryManagementSystem
+   ```
 
-3. Ensure you have Python 3.6 or higher installed.
+3. Ensure Python 3.6 or higher is installed.
+4. (Optional) Create a virtual environment:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+5. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Usage
 
-1. Run the application:
+Run the application from the project root:
 
-   `python App.py`
+```bash
+python main.py
+```
 
-2. Follow the on-screen instructions to interact with the system.
+Follow the on-screen instructions to interact with the system.
 
 ## Project Structure
 
-```bash
-        library-management-system/
-        ├── Diagrams/                        # Project Diagram
-        │   ├── 22UG2-0004_ClassDiagram.png  # Book management module
-        |
-        ├── BookManagement.py                # Book management module
-        ├── MemberManagement.py              # Member management module
-        ├── PublisherManagement.py           # Publisher management module
-        ├── AuthorManagement.py              # Author management module
-        ├── App.py                           # Main application file
-        └── .gitignore                       # Git ignore file
-```
+See the [Architecture](#architecture) section for a directory overview. Key modules include:
 
-## Example Usage
+- `main.py`: Application entry point
+- `models/`: Data models for core entities
+- `repository/`: Data access and persistence
+- `services/`: Business logic
+- `views/`: CLI and planned GUI components
+- `utils/`: Utility functions and helpers
 
-```bash
-        ========== Add Book ==========
-        Enter Title: The Great Gatsby
-        Enter ISBN: 123456
-        Enter Author: F. Scott Fitzgerald
-        Enter Category: Fiction
-        Enter Status: Available
-        Book 'The Great Gatsby' Added Successfully!
-```
+## Collaborators
 
-```bash
-        ========== Borrow a Book ==========
-        Member: Alice
-        Book: The Great Gatsby
-        Book 'The Great Gatsby' borrowed by Alice.
-```
+This project is developed and maintained by:
 
-## Future Enhancements
+- [Cisco248](https://github.com/Cisco248) (Project Owner)
 
-- Add a GUI using a library like Tkinter or PyQt.
-- Integrate with a database for persistent storage.
-- Implement authentication for staff and members.
+For contributions, please see the [Contributing](#contributing) section.
 
 ## Contributing
 
-1. Fork the repository.
+Contributions are welcome. To contribute:
 
-2. Create a new branch for your feature/bug fix:
+1. Fork the repository
+2. Create a new branch for your feature or bugfix
+3. Commit your changes with clear messages
+4. Push to your fork and submit a pull request
 
-   `git checkout -b feature-name`
-
-3. Commit your changes:
-
-   `git commit -m "Description of changes"`
-
-4. Push to your branch:
-
-   `git push origin feature-name`
-
-5. Create a pull request.
+Please ensure your code follows the project structure and is well-documented.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for
-details.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Acknowledgments
 
 - Python documentation: <https://docs.python.org/3/>
-- Community contributions and suggestions.
+- Community contributions and suggestions

@@ -5,11 +5,22 @@ from services._service_class import Controller
 
 
 class AuthorActionController(Controller):
-
     def __init__(self):
         self.repository = AuthorRepository()
 
-    def handle_get_one(self, author_id: str) -> AuthorModel | str:
+    def handle_import(self):
+        try:
+            self.repository.import_data()
+        except Exception as e:
+            return messagebox.showerror("error", message=f"{str(e)}")
+
+    def handle_export(self):
+        try:
+            self.repository.export_data()
+        except Exception as e:
+            return messagebox.showerror("error", message=f"{str(e)}")
+
+    def handle_get_one(self, author_id: str):
         try:
             return self.repository.get_one(author_id)
         except Exception as e:
@@ -28,13 +39,13 @@ class AuthorActionController(Controller):
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")
 
-    def handle_update(self, author_id: str, updates: dict) -> str:
+    def handle_update(self, data: AuthorModel) -> str:
         try:
-            if not author_id:
+            if not data.author_id:
                 return messagebox.showwarning(
                     "Warning", "Author ID is required for updating."
                 )
-            res = self.repository.update(author_id, updates)
+            res = self.repository.update(data)
             return messagebox.showinfo("Author Updated", f"{res}")
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")

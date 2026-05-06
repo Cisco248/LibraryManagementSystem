@@ -1,40 +1,36 @@
 import csv
-import logging
 import os
-from tkinter import messagebox
+from config.Configuration import (
+    MEMBER_TABLE_QUERY,
+    MEMBER_IMPORT_PATH,
+    MEMBER_IMPORT_QUERY,
+    MEMBER_EXPORT_QUERY,
+    MEMBER_EXPORT_PATH,
+    MEMBER_GET_ONE_QUERY,
+    MEMBER_GET_ALL_QUERY,
+    MEMBER_ADD_QUERY,
+    MEMBER_UPDATE_QUERY,
+    MEMBER_DELETE_QUERY,
+)
 from models.MemberModel import MemberModel
 from repository._repository_class import Repository
 from utils.DBConnection import DBConnection
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 
 class MemberRepository(Repository):
-
     def __init__(self):
         self.database = DBConnection()
+        self.database.execute(MEMBER_TABLE_QUERY)
 
-        self.database.execute("""
-            CREATE TABLE IF NOT EXISTS members 
-            ( member_id TEXT PRIMARY KEY, member_name TEXT, contact_no TEXT, age INTEGER, membership_type TEXT, membership_status TEXT );
-            """)
-
-        self.load_members()
-
-    def load_members(self) -> str:
-        member_csv = os.path.join("database", "member_data.csv")
-        if os.path.exists(member_csv):
-            with open(member_csv, "r", encoding="utf-8") as f:
+    def import_data(self) -> str:
+        csv_data = os.path.join(MEMBER_IMPORT_PATH)
+        if os.path.exists(csv_data):
+            with open(csv_data, "r", encoding="utf-8") as f:
                 reader = csv.reader(f)
                 next(reader)
                 for row in reader:
                     self.database.execute(
-                        """
-                        INSERT OR IGNORE INTO members (
-                        member_id, member_name, contact_no, age, membership_type, membership_status) 
-                        VALUES (?, ?, ?, ?, ?, ?);
-                        """,
+                        MEMBER_IMPORT_QUERY,
                         (
                             row[0].strip(),
                             row[1].strip(),
@@ -44,56 +40,58 @@ class MemberRepository(Repository):
                             row[5].strip(),
                         ),
                     )
-                return "Members loaded successfully"
-        return f"Member data file not found at {member_csv}"
+                return f"Data {len(row)} Imported Successfully"
+        return f"Data File Not Found"
+
+    def export_data(self):
+        try:
+            self.rows = self.database.execute(MEMBER_EXPORT_QUERY, fetch=True)
+            if not self.rows:
+                return "No Data to Export"
+            with open(
+                file=MEMBER_EXPORT_PATH, mode="w", newline="", encoding="utf-8"
+            ) as f:
+                self.writer = csv.writer(f)
+                self.writer.writerows(self.rows)
+            return f"Data {len(self.rows)} Exported Successfully"
+        except Exception as e:
+            return f"{str(e)}"
 
     def get_one(self, id: str):
         try:
-            rows = self.database.execute(
-                "SELECT * FROM member WHERE member_id = %s", params=(id,), fetch=True
+            self.rows = self.database.execute(
+                MEMBER_GET_ONE_QUERY, params=(id,), fetch=True
             )
-
-            if not rows:
-                return "Member doesn't exists!"
-
-            res = rows[0]
-            return MemberModel(
-                member_id=res.get("member_id", ""),
-                member_name=res.get("name", ""),
-                contact_no=res.get("email", ""),
-                age=res.get("phone", ""),
-                membership_type=res.get("membership_date", ""),
-                membership_status=res.get("status", "active"),
+            if not self.rows:
+                return "Value Not Found!"
+            self.response = self.rows[0]
+            self.result = (
+                self.response[0],
+                self.response[1],
+                self.response[2],
+                self.response[3],
+                self.response[4],
+                self.response[5],
             )
+            return self.result
         except Exception as e:
             return f"{str(e)}"
 
     def get_all(self):
         try:
-            res = self.database.execute(
-                query="SELECT * FROM members", params=(), fetch=True
+            self.res = self.database.execute(
+                query=MEMBER_GET_ALL_QUERY, params=(), fetch=True
             )
-            return [
-                MemberModel(
-                    member_id=r[0],
-                    member_name=r[1],
-                    contact_no=r[2],
-                    age=r[3],
-                    membership_type=r[4],
-                    membership_status=r[5],
-                )
-                for r in res
-            ]
+            return [r for r in self.res]
         except Exception as e:
             return f"{str(e)}"
 
     def add(self, member: MemberModel):
         if self.get_one(member.member_id):
-            return "Member with ID '{member.member_id}' already exists."
-
+            return "Member Already Exists."
         try:
             self.database.execute(
-                "INSERT INTO members (member_id, member_name, contact_no, age, membership_type, membership_status) VALUES (%s, %s, %s, %s, %s, %s)",
+                MEMBER_ADD_QUERY,
                 (
                     member.member_id,
                     member.member_name,
@@ -103,56 +101,34 @@ class MemberRepository(Repository):
                     member.membership_status,
                 ),
             )
-            return "Member added successfully"
+            return "Data Added Successfully"
         except Exception as e:
             return f"{str(e)}"
 
-    def update(self, id: str, updates: dict):
-        if not updates:
-            return "Update details are missing!"
-
+    def update(self, data: MemberModel):
+        if not data.member_id:
+            return "Values is missing!"
         try:
-            set_clause = ", ".join([f"{key} = %s" for key in updates.keys()])
-            values = list(updates.values())
-            values.append(id)
-
             self.database.execute(
-                f"UPDATE member SET {set_clause} WHERE member_id = %s", tuple(values)
+                query=MEMBER_UPDATE_QUERY,
+                params=(
+                    data.member_id,
+                    data.member_name,
+                    data.contact_no,
+                    data.age,
+                    data.membership_type,
+                    data.membership_status,
+                ),
             )
-            return f"Member with ID: {id} updated successfully!"
+            return "Data Updated Successfully!"
         except Exception as e:
             return f"{str(e)}"
 
     def delete(self, id: str):
         if not self.get_one(id):
-            return "Member with ID '{id}' not found."
-
+            return "Member Not Found"
         try:
-            self.database.execute("DELETE FROM member WHERE member_id = %s", (id,))
-            return f"Member with ID: {id} deleted successfully!"
-        except Exception as e:
-            return f"{str(e)}"
-
-    def search(self, **criteria):
-        if not criteria:
-            return "No search criteria provided."
-        try:
-            conditions = " AND ".join([f"{key} LIKE %s" for key in criteria.keys()])
-            values = tuple(f"%{val}%" for val in criteria.values())
-
-            res = self.database.execute(
-                f"SELECT * FROM member WHERE {conditions}", values, fetch=True
-            )
-            return [
-                MemberModel(
-                    member_id=r.get("member_id", ""),
-                    member_name=r.get("name", ""),
-                    contact_no=r.get("email", ""),
-                    age=r.get("phone", ""),
-                    membership_type=r.get("membership_date", ""),
-                    membership_status=r.get("status", "active"),
-                )
-                for r in res
-            ]
+            self.database.execute(MEMBER_DELETE_QUERY, (id,))
+            return f"Member Deleted Successfully!"
         except Exception as e:
             return f"{str(e)}"
