@@ -1,8 +1,9 @@
 from tkinter import ttk
-import tkinter as tk
 
+from models.PublisherModel import PublisherModel
+from models.AuthorModel import AuthorModel
 from models.BookModel import BookModel, BookType, BookStatus, FileFormat
-
+from models.MemberModel import MemberModel
 from ..widgets import FormEntry
 
 
@@ -220,202 +221,266 @@ class BookForm(ttk.LabelFrame):
             field.__clear__()
 
 
-class AuthorForm(tk.LabelFrame):
+class AuthorForm(ttk.LabelFrame):
 
-    def __init__(self, parent, command):
-        super().__init__(parent, text="Add Author to Library", padx=12, pady=12)
+    def __init__(self, parent, title):
+        super().__init__(parent, text=title, padding=(0, 8))
 
+        for i in range(4):
+            self.columnconfigure(i, weight=1)
+        self.rowconfigure(0)
+        self.rowconfigure(1)
+
+        self.__widget__()
+        self.__layout__()
+
+    def __widget__(self):
         self.id = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="author_id",
             label="Author ID",
             type="entry",
         )
-        self.id.pack(fill="x", pady=(10, 0))
-
         self.name = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="author_name",
             label="Author Name",
             type="entry",
         )
-        self.name.pack(fill="x", pady=(10, 0))
-
         self.address = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="address",
             label="Author Address",
             type="entry",
         )
-        self.address.pack(fill="x", pady=(10, 0))
-
         self.gov_reg_no = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="gov_reg_no",
             label="Government Registration Number",
             type="entry",
         )
-        self.gov_reg_no.pack(fill="x", pady=(10, 0))
-
         self.agree_time = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="agreement_time",
             label="Agreement Time",
             type="entry",
         )
-        self.agree_time.pack(fill="x", pady=(10, 0))
 
-        submit_btn = ttk.Button(self, text="Submit", padding=(8, 4), command=command)
-        submit_btn.pack(pady=(10, 0))
+    def __layout__(self):
+        self.id.grid(row=0, column=0, padx=4, sticky="ew")
+        self.name.grid(row=0, column=1, padx=4, sticky="ew")
+        self.address.grid(row=0, column=2, padx=4, sticky="ew")
+        self.gov_reg_no.grid(row=0, column=3, padx=4, sticky="ew")
+        self.agree_time.grid(row=1, column=0, padx=4, sticky="ew")
 
     def __get__(self):
-        return {
-            "author_id": self.id.__get__(),
-            "author_name": self.name.__get__(),
-            "author_address": self.address.__get__(),
-            "gov_reg_no": self.gov_reg_no.__get__(),
-            "agreement_time": self.agree_time.__get__(),
-        }
+        return AuthorModel(
+            author_id=self.id.__get__(),
+            author_name=self.name.__get__(),
+            address=self.address.__get__(),
+            gov_reg_no=self.gov_reg_no.__get__(),
+            agreement_time=self.agree_time.__get__(),
+        )
+
+    def __set__(self, data: dict):
+        self.id.__set__(data.get("author_id", ""))
+        self.name.__set__(data.get("author_name", ""))
+        self.address.__set__(data.get("address", ""))
+        self.gov_reg_no.__set__(data.get("gov_reg_no", ""))
+        self.agree_time.__set__(data.get("agreement_time", ""))
+
+    def __clear__(self):
+        for field in [
+            self.id,
+            self.name,
+            self.address,
+            self.gov_reg_no,
+            self.agree_time,
+        ]:
+            field.__clear__()
 
 
-class PublisherForm(tk.LabelFrame):
+class PublisherForm(ttk.LabelFrame):
 
-    def __init__(self, parent, command):
-        super().__init__(parent, text="Add Publisher to Library", padx=12, pady=12)
+    def __init__(self, parent, title: str):
+        super().__init__(parent, text=title, padding=(0, 8))
 
+        for i in range(4):
+            self.columnconfigure(i, weight=1)
+        self.rowconfigure(0)
+        self.rowconfigure(1)
+
+        self.__widget__()
+        self.__layout__()
+
+    def __widget__(self):
         self.id = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="publisher_id",
             label="Publisher ID",
             type="entry",
         )
-        self.id.pack(fill="x", pady=(10, 0))
-
         self.name = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="publisher_name",
             label="Publisher Name",
             type="entry",
         )
-        self.name.pack(fill="x", pady=(10, 0))
-
         self.address = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="address",
             label="Publisher Address",
             type="entry",
         )
-        self.address.pack(fill="x", pady=(10, 0))
-
         self.gov_reg_no = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="gov_reg_no",
             label="Government Registration Number",
             type="entry",
         )
-        self.gov_reg_no.pack(fill="x", pady=(10, 0))
-
         self.agree_time = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="agreement_time",
             label="Agreement Time",
             type="entry",
         )
-        self.agree_time.pack(fill="x", pady=(10, 0))
 
-        submit_btn = ttk.Button(self, text="Submit", padding=(8, 4), command=command)
-        submit_btn.pack(pady=(10, 0))
+    def __layout__(self):
+        self.id.grid(row=0, column=0, padx=4, sticky="ew")
+        self.name.grid(row=0, column=1, padx=4, sticky="ew")
+        self.address.grid(row=0, column=2, padx=4, sticky="ew")
+        self.gov_reg_no.grid(row=0, column=3, padx=4, sticky="ew")
+        self.agree_time.grid(row=1, column=0, padx=4, sticky="ew")
 
     def __get__(self):
-        return {
-            "publisher_id": self.id.__get__(),
-            "publisher_name": self.name.__get__(),
-            "publisher_address": self.address.__get__(),
-            "gov_reg_no": self.gov_reg_no.__get__(),
-            "agreement_time": self.agree_time.__get__(),
-        }
+        return PublisherModel(
+            publisher_id=self.id.__get__(),
+            publisher_name=self.name.__get__(),
+            address=self.address.__get__(),
+            gov_reg_no=self.gov_reg_no.__get__(),
+            agreement_time=self.agree_time.__get__(),
+        )
+
+    def __set__(self, data: dict):
+        self.id.__set__(data.get("publisher_id", ""))
+        self.name.__set__(data.get("publisher_name", ""))
+        self.address.__set__(data.get("address", ""))
+        self.gov_reg_no.__set__(data.get("gov_reg_no", ""))
+        self.agree_time.__set__(data.get("agreement_time", ""))
+
+    def __clear__(self):
+        for field in [
+            self.id,
+            self.name,
+            self.address,
+            self.gov_reg_no,
+            self.agree_time,
+        ]:
+            field.__clear__()
 
 
-class MemberForm(tk.LabelFrame):
+class MemberForm(ttk.LabelFrame):
 
-    def __init__(self, parent, command):
-        super().__init__(parent, text="Add Member to Library", padx=12, pady=12)
+    def __init__(self, parent, title: str):
+        super().__init__(parent, text=title, padding=(0, 8))
 
+        for i in range(6):
+            self.columnconfigure(i, weight=1)
+        self.rowconfigure(0)
+        self.rowconfigure(1)
+
+        self.__widget__()
+        self.__layout__()
+
+    def __widget__(self):
         self.id = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="member_id",
             label="Member ID",
             type="entry",
         )
-        self.id.pack(fill="x", pady=(10, 0))
-
         self.name = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="member_name",
             label="Member Name",
             type="entry",
         )
-        self.name.pack(fill="x", pady=(10, 0))
-
         self.contact_no = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="contact_no",
             label="Contact Number",
             type="entry",
         )
-        self.contact_no.pack(fill="x", pady=(10, 0))
-
         self.age = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="age",
             label="Member Age",
             type="entry",
         )
-        self.age.pack(fill="x", pady=(10, 0))
-
         self.member_type = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="membership_type",
             label="Membership Type",
             type="selector",
             values=["Staff", "Client"],
         )
-        self.member_type.pack(fill="x", pady=(10, 0))
-
         self.membership_status = FormEntry(
             self,
-            direction="horizontal",
+            direction="vertical",
             name="membership_status",
             label="Membership Status",
             type="selector",
             values=["None", "Bronze", "Silver", "Gold", "Platinum"],
         )
-        self.membership_status.pack(fill="x", pady=(10, 0))
 
-        submit_btn = ttk.Button(self, text="Submit", padding=(8, 4), command=command)
-        submit_btn.pack(pady=(10, 0))
+    def __layout__(self):
+        self.id.grid(row=0, column=0, padx=4, sticky="ew")
+        self.name.grid(row=0, column=1, padx=4, sticky="ew")
+        self.contact_no.grid(row=0, column=2, padx=4, sticky="ew")
+        self.age.grid(row=0, column=3, padx=4, sticky="ew")
+        self.member_type.grid(row=1, column=0, padx=4, sticky="ew")
+        self.membership_status.grid(row=1, column=1, padx=4, sticky="ew")
 
     def __get__(self):
-        return {
-            "member_id": self.id.__get__(),
-            "member_name": self.name.__get__(),
-            "contact_no": self.contact_no.__get__(),
-            "age": self.age.__get__(),
-            "membership_type": self.member_type.__get__(),
-            "membership_status": self.membership_status.__get__(),
-        }
+        return MemberModel(
+            member_id=self.id.__get__(),
+            member_name=self.name.__get__(),
+            contact_no=self.contact_no.__get__(),
+            age=int(self.age.__get__()),
+            membership_type=self.member_type.__get__(),
+            membership_status=self.membership_status.__get__(),
+        )
+
+    def __set__(self, data: dict):
+        self.id.__set__(data.get("member_id", ""))
+        self.name.__set__(data.get("member_name", ""))
+        self.contact_no.__set__(data.get("contact_no", ""))
+        self.age.__set__(data.get("age", ""))
+        self.member_type.__set__(data.get("membership_type", ""))
+        self.membership_status.__set__(data.get("membership_status", ""))
+
+    def __clear__(self):
+        for field in [
+            self.id,
+            self.name,
+            self.contact_no,
+            self.age,
+            self.member_type,
+            self.membership_status,
+        ]:
+            field.__clear__()

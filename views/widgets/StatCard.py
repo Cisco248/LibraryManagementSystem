@@ -3,7 +3,7 @@ from tkinter import ttk
 
 class StatCard(ttk.Frame):
     def __init__(self, parent, title):
-        super().__init__(parent, padding=10, relief="ridge")
+        super().__init__(parent, padding=10, relief="groove", border=2.0)
 
         self.columnconfigure(0, weight=1)
 

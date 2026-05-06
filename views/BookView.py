@@ -1,12 +1,13 @@
 from tkinter import messagebox, ttk
 
+from config.Configuration import BOOK_DASHBOARD_QUERY
 from services.BookService import BookActionController
 from utils.DBConnection import DBConnection
-from views.components import SearchComponent
+from views.components import BookSearchComponent
 from views.components.DashBoard import Dashboard
 from views.components.FormComponent import BookForm
 from views.components.ListViewComponents import BookListView
-from views.components.ToolBarComponent import ButtonToolBar
+from views.components.ToolBarComponent import BookButtonToolBar
 
 
 class BookView(ttk.Frame):
@@ -18,18 +19,27 @@ class BookView(ttk.Frame):
         self.frame = ttk.Frame(parent)
         parent.add(self.frame, text="Books")
 
-        for i in range(5):
+        for i in range(4):
             self.frame.rowconfigure(i)
 
-        self.frame.rowconfigure(5)
+        self.frame.rowconfigure(4, weight=1)
+        self.frame.rowconfigure(5, weight=1)
         self.frame.columnconfigure(0, weight=1)
 
         self.__widget__(self.frame)
         self.__layout__()
 
     def __widget__(self, Tab: ttk.Frame):
-        self.dashboard = Dashboard(Tab)
-        self.search_component = SearchComponent(
+        self.dashboard = Dashboard(
+            Tab,
+            query=BOOK_DASHBOARD_QUERY,
+            value_1="Total Books",
+            value_2="Available",
+            value_3="Borrowed",
+            value_4="Reserved",
+            value_5="Unavailable",
+        )
+        self.search_component = BookSearchComponent(
             Tab,
             title="Search Books",
             button_text="Search",
@@ -37,7 +47,7 @@ class BookView(ttk.Frame):
             service=self.services,
         )
         self.bf = BookForm(Tab, title="Book Form")
-        self.buttonbar = ButtonToolBar(
+        self.buttonbar = BookButtonToolBar(
             parent=Tab,
             title="Book Operations",
             add_func=self._add_book,
@@ -45,7 +55,7 @@ class BookView(ttk.Frame):
             update_func=self._update_book,
             clear_func=self.bf.__clear__,
             import_func=self._import_books,
-            export_func=self.services.handle_export,
+            export_func=self._export_books,
         )
         self.list = BookListView(Tab, form=self.bf)
 
@@ -54,7 +64,7 @@ class BookView(ttk.Frame):
         self.search_component.grid(row=1, column=0, sticky="ew", padx=8, pady=4)
         self.bf.grid(row=2, column=0, sticky="ew", padx=8, pady=4)
         self.buttonbar.grid(row=3, column=0, sticky="ew", padx=8, pady=4)
-        self.list.grid(row=4, column=0, sticky="nsew", padx=8)
+        self.list.grid(row=4, rowspan=2, column=0, sticky="ew", padx=8)
 
     def _import_books(self):
         self.services.handle_import()

@@ -1,30 +1,24 @@
-"""
-Author Model Module
-
-This module defines the AuthorModel class representing an author entity
-in the library management system.
-"""
+from dataclasses import dataclass
+from typing import Dict, Tuple
 
 
+@dataclass(slots=True)
 class AuthorModel:
-    def __init__(
-        self,
-        author_id: str,
-        author_name: str,
-        address: str = "",
-        gov_reg_no: str = "",
-        agreement_time: int = 0,
-    ):
-        if not author_id or not isinstance(author_id, str):
-            raise ValueError("Author ID must be a non-empty string.")
-        if not author_name or not isinstance(author_name, str):
-            raise ValueError("author_name must be a non-empty string.")
+    author_id: str
+    author_name: str
+    address: str
+    gov_reg_no: str
+    agreement_time: str
 
-        self.author_id = author_id
-        self.author_name = author_name
-        self.address = address
-        self.gov_reg_no = gov_reg_no
-        self.agreement_time = agreement_time
+    def validate(self):
+        if not self.author_id:
+            raise ValueError("author_id is required")
+
+        if not self.author_name:
+            raise ValueError("author_name is required")
+
+        if not self.gov_reg_no:
+            raise ValueError("gov_reg_no is required")
 
     def to_dict(self) -> dict:
         return {
@@ -35,6 +29,16 @@ class AuthorModel:
             "agreement_time": self.agreement_time,
         }
 
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            author_id=str(data.get("author_id", "")).strip(),
+            author_name=str(data.get("author_name", "")).strip(),
+            address=str(data.get("address", "")).strip(),
+            gov_reg_no=str(data.get("gov_reg_no", "")).strip(),
+            agreement_time=str(data.get("agreement_time", "")).strip(),
+        )
+
     def to_tuple(self):
         return (
             self.author_id,
@@ -44,5 +48,16 @@ class AuthorModel:
             self.agreement_time,
         )
 
-    def __repr__(self) -> str:
-        return f"ID={self.author_id}, Name={self.author_name}"
+    @classmethod
+    def from_tuple(cls, data: tuple):
+        return cls(*map(str, data))
+
+    def __repr__(self):
+        return f"AuthorModel(id={self.author_id}, name='{self.author_name}', gov_reg_no='{self.gov_reg_no}')"
+
+    def __str__(self):
+        return (
+            f"ID={self.author_id}, Name={self.author_name}, "
+            f"Address={self.address}, Government Registration No={self.gov_reg_no}, "
+            f"Agreement Time={self.agreement_time}"
+        )

@@ -7,15 +7,27 @@ class PublisherActionController:
     def __init__(self):
         self.repository = PublisherRepository()
 
+    def handle_import(self):
+        try:
+            self.repository.import_data()
+        except Exception as e:
+            return messagebox.showerror("error", message=f"{str(e)}")
+
+    def handle_export(self):
+        try:
+            self.repository.export_data()
+        except Exception as e:
+            return messagebox.showerror("error", message=f"{str(e)}")
+
     def handle_get_all(self):
         try:
             return self.repository.get_all()
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")
 
-    def handle_get_one(self, **criteria):
+    def handle_get_one(self, id):
         try:
-            return self.repository.search(**criteria)
+            return self.repository.get_one(id)
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")
 
@@ -26,33 +38,33 @@ class PublisherActionController:
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")
 
-    def handle_update(self, publisher_id: str, updates: dict) -> str:
+    def handle_update(self, data: PublisherModel) -> str:
         try:
-            if not publisher_id:
+            if not data.publisher_id:
                 return messagebox.showwarning(
                     "Warning", "Publisher ID is required for updating."
                 )
-            res = self.repository.update(publisher_id, updates)
+            res = self.repository.update(data)
             return messagebox.showinfo("Publisher Updated", f"{res}")
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")
 
-    def handle_delete(self, publisher_id: str) -> str:
+    def handle_delete(self, id: str) -> str:
         try:
-            if not publisher_id:
+            if not id:
                 return messagebox.showwarning(
                     "Warning", "Please provide a Publisher ID to delete."
                 )
 
             confirm = messagebox.askyesno(
                 "Confirm Deletion",
-                f"Are you sure you want to delete publisher with ID: {publisher_id}?",
+                f"Are you sure you want to delete publisher with ID: {id}?",
             )
 
             if not confirm:
                 return messagebox.showinfo("Cancelled", "Publisher deletion cancelled.")
 
-            res = self.repository.delete(publisher_id)
+            res = self.repository.delete(id)
             return messagebox.showinfo("Publisher Deleted", f"{res}")
         except Exception as e:
             return messagebox.showerror("Error", f"{str(e)}")
